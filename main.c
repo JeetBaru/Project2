@@ -57,8 +57,8 @@ int main(void)
 	initialize_buffer(circ_pre,8);
 	uartinit();
 	log_data(ptr, length);
-	//log_string(ptr);
-	//log_integer(0x33);
+	log_string(ptr);
+	log_integer(0x33);
 	//UART0_C2 |= 0x20;
 	/*
 	log1 = (log *)malloc(sizeof(log));
@@ -66,10 +66,19 @@ int main(void)
 	log_item(log1);
 	*/
 	while(1){
+		if(is_buffer_full(circ_pre)==NO){
 		UART0_C2 |= 0x20;
 		__enable_irq();
+		}
+		else{
+			break;
+		}
 	}
-
+	while(is_buffer_empty(circ_pre)==NO){
+		UART0_C2 |= 0x80;
+		add_item(circ_ptr,remove_item(circ_pre));
+		__enable_irq();
+	}
 
 	/*
 	while(1){
