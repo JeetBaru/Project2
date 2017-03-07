@@ -30,6 +30,9 @@
 #include "MKL25Z4.h"
 #include "uart.h"
 #include "logger.h"
+#include "cirbuff.h"
+
+
 
 int main(void)
 {
@@ -44,14 +47,61 @@ int main(void)
 	uartinittx();
 	sendbyte(data);
 	*/
-	int8_t data [] = "12345678";
-	int32_t length = 8;
-	int8_t * ptr = data;
+
+	uint8_t data [] = "123456789";
+	uint32_t length = 3;
+	uint8_t * ptr = data;
+	circ_ptr = (circ_buff *)malloc(sizeof(circ_buff));
+	initialize_buffer(circ_ptr,100);
+	circ_pre = (circ_buff *)malloc(sizeof(circ_buff));
+	initialize_buffer(circ_pre,8);
+	uartinit();
 	log_data(ptr, length);
-	log_string(ptr);
-	log_integer(0x12);
-	uint8_t d = recievebyte();
-	sendbyte(d);
+	//log_string(ptr);
+	//log_integer(0x33);
+	//UART0_C2 |= 0x20;
+	/*
+	log1 = (log *)malloc(sizeof(log));
+	create_log_item(log1,INFO,1,ptr);
+	log_item(log1);
+	*/
+	while(1){
+		UART0_C2 |= 0x20;
+		__enable_irq();
+	}
+
+
+	/*
+	while(1){
+	if(UART0_D && (is_buffer_full(circ_pre)==NO)){
+		add_item(circ_pre, UART0_D) ;
+		__enable_irq();
+		}
+	}
+	*/
+	/*
+	int32_t i;
+	for(i=0;i<10000;i++);
+	while(is_buffer_full(circ_pre)){
+		int8_t c=recievebyte();
+		add_item(circ_pre,c);
+		sendbyte(c);
+	}
+	/*
+	while(is_buffer_full(circ_pre)!=FULL)
+	{
+		add_item(circ_pre,UART0_D);
+	}
+	*/
+	//uint32_t i;
+	//for(i=1;1<10000;i++);
+	//sendbyte(0x99);
+
+
+	//log_recieve();
+
+	//uint8_t d = recievebyte();
+	//sendbyte(d);
 
 	return 0;
 }

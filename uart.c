@@ -49,6 +49,8 @@ void uartinit()
 	UART0_BDH = 0x00;
 	UART0_BDL = 0x17;
 
+	NVIC->ISER[0] |= 0x00001000;
+
 	UART0_C2 = 0x0C;
 
 	SIM_SCGC5 |= 0x200;  //Enable PORT A Clock
@@ -105,6 +107,7 @@ void sendnbytes(int8_t * ptr, int32_t l)
 		ptr++;
 	}
 }
+
 /*
 int main(void)
 {
