@@ -28,6 +28,7 @@
  */
 
 #include "MKL25Z4.h"
+#include "logger.h"
 
 
 void uartinit()
@@ -56,6 +57,9 @@ void uartinit()
 	SIM_SCGC5 |= 0x200;  //Enable PORT A Clock
 	PORTA_PCR1=0x200;
 	PORTA_PCR2=0x200;
+
+	create_log_item(log1,GPIO_INITIALIZED,1,0);
+	log_item(log1);
 
 }
 /*

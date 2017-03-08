@@ -48,38 +48,84 @@ int main(void)
 	sendbyte(data);
 	*/
 
-	uint8_t data [] = "123456789";
-	uint32_t length = 3;
-	uint8_t * ptr = data;
+	//uint8_t data [] = "123456789";
+	//uint32_t length = 3;
+	//uint8_t * ptr = data;
 	circ_ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(circ_ptr,100);
+	initialize_buffer(circ_ptr,500);
 	circ_pre = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(circ_pre,8);
-	uartinit();
-	log_data(ptr, length);
-	log_string(ptr);
-	log_integer(0x33);
-	//UART0_C2 |= 0x20;
-	/*
+	initialize_buffer(circ_pre,16);
 	log1 = (log *)malloc(sizeof(log));
-	create_log_item(log1,INFO,1,ptr);
+	uartinit();
+	create_log_item(log1,SYSTEM_INITIALIZED,1,0);
 	log_item(log1);
-	*/
+	//log_data(ptr, length);
+	//log_string(ptr);
+	//log_integer(0x33);
+	//UART0_C2 |= 0x20;
+	//create_log_item(log1,INFO,1,ptr);
+	//log_item(log1);
+
+	//log1 = (log *)malloc(sizeof(log));
+	//int8_t c [20];
+	//int8_t * pt;
+	//pt=c;
+	create_log_item(log1,INFO,1,"ENTER ONLY 16 CHARACTERS");
+	log_item(log1);
+
 	while(1){
-		if(is_buffer_full(circ_pre)==NO){
-		UART0_C2 |= 0x20;
-		__enable_irq();
+		if(is_buffer_full(circ_pre)==NO && (UART0_S1 & 40)){
+			UART0_C2 |= 0x20;
+			__enable_irq();
 		}
-		else{
+		else if(is_buffer_full(circ_pre)==FULL){
+			__disable_irq();
 			break;
 		}
 	}
+
+	create_log_item(log1,WARNING,1,"RECIEVE BUFFER FULL");
+	log_item(log1);
+
+	*((circ_pre->tail)+16)='\0';
+
+	create_log_item(log1,DATA_RECIEVED,1,circ_pre->tail);
+	log_item(log1);
+
+	create_log_item(log1,DATA_ANALYSIS_STARTED,1,0);
+	log_item(log1);
+
+	analyse_data(circ_pre->tail);
+
+	create_log_item(log1,DATA_ANALYSIS_COMPLETED,1,0);
+	log_item(log1);
+
+
 	while(is_buffer_empty(circ_pre)==NO){
 		UART0_C2 |= 0x80;
 		add_item(circ_ptr,remove_item(circ_pre));
 		__enable_irq();
 	}
+	/*
+	create_log_item(log1,DATA_ANALYSIS_STARTED,1,0);
+	log_item(log1);
 
+	int8_t array [8]={0,'\0',0,'\0',0,'\0',0,'\0'};
+
+	analyse_data(circ_pre->buff,&array);
+
+	create_log_item(log1,DATA_ALPHA_COUNT,1,&array[4]);
+	log_item(log1);
+
+	create_log_item(log1,DATA_NUMERIC_COUNT,1,&array[2]);
+	log_item(log1);
+
+	create_log_item(log1,DATA_PUNCTUATION_COUNT,1,&array[0]);
+	log_item(log1);
+
+	create_log_item(log1,DATA_MISC_COUNT,1,&array[6]);
+	log_item(log1);
+	*/
 	/*
 	while(1){
 	if(UART0_D && (is_buffer_full(circ_pre)==NO)){
