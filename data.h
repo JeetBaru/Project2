@@ -1,0 +1,20 @@
+#ifndef __DATA_H__
+#define __DATA_H__
+#include <stdint.h>
+#include <stdio.h>
+
+#define MAX {0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xA,0xB,\
+0xC,0xD,0xE,0xF,0x0,0x1,0x2,0x3,0x4,0x5,0x6,0x7,0x8,0x9,0xA,0xB,0xC,0xD,0xE,0xF}
+
+//enum retData status = malloc(sizeof(retData));
+int8_t * my_itoa(int8_t * str, int32_t data, int32_t base);
+int32_t my_atoi(int8_t * str);
+int8_t big_to_little32(uint32_t * data,uint32_t length);
+int8_t little_to_big32(uint32_t * data,uint32_t length);
+void print_memory(uint8_t * start, uint32_t length);
+typedef enum retData{
+	NULL_PTR,
+	INV_LENGTH, 
+	SUCCESS
+	}Redta_t;
+#endif
