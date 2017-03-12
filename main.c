@@ -29,6 +29,7 @@
 #ifndef VERBOSE
 	#include "MKL25Z4.h"
 #endif
+#include <stdlib.h>
 #include "uart.h"
 #include "logger.h"
 #include "cirbuff.h"

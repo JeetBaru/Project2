@@ -1,7 +1,6 @@
 
 //logger.c
 
-# include "MKL25Z4.h"
 # include "uart.h"
 # include "cirbuff.h"
 # include "logger.h"

@@ -9,6 +9,7 @@
 #define _LOGGER_H_
 
 #include <stdint.h>
+#include "cirbuff.h"
 
 typedef struct log_t{
 	int8_t logid;
@@ -29,7 +30,7 @@ void log_string(int8_t * ptr);
 void create_log_item(log * logptr, status log_id, int32_t length, int8_t * ptr);
 void destroy_log_item(log * log1);
 void log_item(log * logptr);
-void log_flush(circ_pre);
+void log_flush(circ_buff * circ_pre);
 
 
 #define LOG_IT(logptr, log_id, length, ptr); {\

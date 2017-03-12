@@ -27,9 +27,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "MKL25Z4.h"
-#include "logger.h"
-#include "cirbuff.h"
+#include "uart.h"
 
 #define FLL_CLOCK_MASK 0x04000000
 #define CLOCK_GATE_ENABLE 0x00000400

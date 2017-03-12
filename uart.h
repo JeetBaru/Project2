@@ -8,7 +8,9 @@
 #ifndef _UART_H_
 #define _UART_H_
 
-#include <stdint.h>i
+#include "logger.h"
+#include "cirbuff.h"
+#include <stdint.h>
 
 void uartinit();
 void sendbyte(uint8_t data);
