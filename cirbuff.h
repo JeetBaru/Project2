@@ -1,9 +1,15 @@
-#include <stdio.h>
-#include <stdint.h>
-#include <stdlib.h>
+/*
+ * cirbuff.h
+ *
+ *  Created on: Mar 11, 2017
+ *      Author: Jeet
+ */
 
-#ifndef _CIRBUFF_H
-#define _CIRBUFF_H
+#ifndef CIRBUFF_H_
+#define CIRBUFF_H_
+
+#ifndef SOURCES_CIRBUFF_H_
+#define SOURCES_CIRBUFF_H_
 
 typedef struct circ_buff_t{
 	uint8_t * buff;
@@ -28,3 +34,6 @@ void add_item(circ_buff * cb1, uint8_t data);
 uint8_t remove_item(circ_buff * cb1);
 
 #endif
+
+
+#endif /* CIRBUFF_H_ */

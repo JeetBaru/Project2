@@ -13,5 +13,6 @@ void uartinittx();
 void sendbyte(uint8_t data);
 uint8_t recievebyte();
 void sendnbytes(int8_t * ptr, int32_t l);
+void recieve_n_bytes();
 
 #endif /* SOURCES_UART_H_ */

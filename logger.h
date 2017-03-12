@@ -29,5 +29,16 @@ void log_integer();
 void create_log_item(log * logptr, status log_id, int32_t length, int8_t * ptr);
 void log_item(log * logptr);
 void analyse_data(int8_t * c);
+void log_print(uint8_t * string);
+void log_prinint(int32_t data);
+
+#define LOG_IT(logptr, log_id, length, ptr); {\
+	create_log_item(logptr, log_id, length, ptr);\
+	log_item(logptr);\
+	}
+
+#define LOG_RAW_STRING(string) log_string(string)
+#define LOG_RAW_INTEGER(data) log_integer(data)
+#define LOG_RAW_DATA(pointer) log_data(pointer,length)
 
 #endif /* SOURCES_LOGGER_H_ */

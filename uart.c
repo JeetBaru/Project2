@@ -29,6 +29,7 @@
 
 #include "MKL25Z4.h"
 #include "logger.h"
+#include "cirbuff.h"
 
 
 void uartinit()
@@ -58,8 +59,7 @@ void uartinit()
 	PORTA_PCR1=0x200;
 	PORTA_PCR2=0x200;
 
-	create_log_item(log1,GPIO_INITIALIZED,1,0);
-	log_item(log1);
+	LOG_IT(log1,GPIO_INITIALIZED,1,0);
 
 }
 /*
@@ -109,6 +109,20 @@ void sendnbytes(int8_t * ptr, int32_t l)
 		while(!(UART0_S1 & 0x80));
 		UART0_D=*ptr;
 		ptr++;
+	}
+}
+
+void recieve_n_bytes()
+{
+	while(1){
+		if(is_buffer_full(circ_pre)==NO && (UART0_S1 & 40)){
+			UART0_C2 |= 0x20;
+			__enable_irq();
+		}
+		else if(is_buffer_full(circ_pre)==FULL){
+			__disable_irq();
+			break;
+		}
 	}
 }
 

@@ -33,8 +33,15 @@ void log_data(uint8_t * ptr,uint32_t length)
 			length = length - circ_ptr->size;
 
 		}
-		UART0_C2 |= 0x80;
-		__enable_irq();
+		#ifdef VERBOSE
+			while(is_buffer_empty(circ_ptr)!=0)
+			{
+				printf("%c",remove_item(circ_ptr));
+			}
+		#else
+			UART0_C2 |= 0x80;
+			__enable_irq();
+		#endif
 		/*
 		__disable_irq();
 		UART0_C2 |= 0x80;
@@ -69,7 +76,7 @@ void UART0_IRQHandler()
 	}
 	else if (UART0_C2 & 0x20)
 	{
-		UART0_C2 &= 0x5F;
+		UART0_C2 &= 0xDF;
 		//if(is_buffer_full(circ_pre)!=FULL)
 		//{
 			//sendbyte(UART0_D);
@@ -112,14 +119,14 @@ void create_log_item(log * logptr, status log_id, int32_t length, int8_t * ptr)
 
 void log_item(log * logptr)
 {
-	log_string("LOG ID ");
-	log_integer(logptr->logid);
+	LOG_RAW_STRING("LOG ID ");
+	LOG_RAW_INTEGER(logptr->logid);
 	if(logptr->payload != 0)
 	{
-		log_string(" / PAYLOAD ");
-		log_string(logptr->payload);
+		LOG_RAW_STRING(" / PAYLOAD ");
+		LOG_RAW_STRING(logptr->payload);
 	}
-	log_string("//");
+	LOG_RAW_STRING("----------");
 }
 
 int8_t * my_itoa(int8_t * str, int32_t data, int32_t base)
@@ -179,13 +186,15 @@ int8_t * my_itoa(int8_t * str, int32_t data, int32_t base)
 
 void analyse_data(int8_t * c)
 {
+	LOG_IT(log1,DATA_ANALYSIS_STARTED,1,0);
+
 	int8_t w=0,x=0,y=0,z=0;
 	while(*c != '\0'){
 		if(*c=='"' || *c==',' || *c=='.' || *c=='?' || *c=='!' || *c==':' || *c==';')
 			(w)++;
-		else if(*c>=0x30 || *c<=0x39)
+		else if(*c>=0x30 && *c<=0x39)
 			(x)++;
-		else if(*c>=0x41 || *c<=0x5A || *c>=0x61 || *c<=0x7A)
+		else if((*c>=0x41 && *c<=0x5A) || (*c>=0x61 && *c<=0x7A))
 			(y)++;
 		else
 			(z)++;
@@ -195,17 +204,15 @@ void analyse_data(int8_t * c)
 	int8_t arr [5];
 	int8_t * p = arr;
 
-	create_log_item(log1,DATA_ALPHA_COUNT,1,my_itoa(p,w,16));
-	log_item(log1);
+	LOG_IT(log1,DATA_ALPHA_COUNT,1,my_itoa(p,y,16));
 
-	create_log_item(log1,DATA_NUMERIC_COUNT,1,my_itoa(p,x,16));
-	log_item(log1);
+	LOG_IT(log1,DATA_NUMERIC_COUNT,1,my_itoa(p,x,16));
 
-	create_log_item(log1,DATA_PUNCTUATION_COUNT,1,my_itoa(p,y,16));
-	log_item(log1);
+	LOG_IT(log1,DATA_PUNCTUATION_COUNT,1,my_itoa(p,w,16));
 
-	create_log_item(log1,DATA_MISC_COUNT,1,my_itoa(p,z,16));
-	log_item(log1);
+	LOG_IT(log1,DATA_MISC_COUNT,1,my_itoa(p,z,16));
+
+	LOG_IT(log1,DATA_ANALYSIS_COMPLETED,1,0);
 }
 
 void log_integer(int32_t data)
@@ -216,3 +223,73 @@ void log_integer(int32_t data)
 	log_string(ptr);
 }
 
+void log_flush(circ_pre)
+{
+	while(is_buffer_empty(circ_pre)!=EMPTY){
+		uint8_t D = remove_item(circ_pre);
+		add_item(circ_ptr, D);
+		UART0_C2 |= 0x80;
+		__enable_irq();
+	}
+}
+
+void log_printdata(uint8_t * ptr, uint32_t length)
+{
+	while(length > 0 )
+	{
+		if(circ_ptr->size > length)
+		{
+			while(length>0)
+			{
+				add_item(circ_ptr, *ptr);
+				ptr++;
+				length--;
+			}
+		//sendnbytes( pt , l);
+		}
+		else
+		{
+			while(is_buffer_full(circ_ptr)!=FULL)
+			{
+				add_item(circ_ptr, *ptr);
+				ptr++;
+			}
+		//sendnbytes( pt , circ_ptr->size);
+			length = length - circ_ptr->size;
+
+		}
+
+		/*
+		__disable_irq();
+		UART0_C2 |= 0x80;
+		__enable_irq();
+		*/
+	}
+		/*
+		__disable_irq();
+		uartinit();
+		*/
+		//UART0_C2 &= 0x7F;
+
+		//sendnbytes(ptr, length)
+}
+
+void log_print(uint8_t * ptr)
+{
+	int32_t length=0;
+		while(*ptr != '\0')
+		{
+			length++;
+			ptr++;
+		}
+		ptr=ptr-length;
+		log_data(ptr,length);
+}
+
+void log_printint(int32_t data)
+{
+	int8_t dest [20];
+	int8_t * ptr = dest;
+	ptr = my_itoa(ptr, data, 16);
+	log_print(ptr);
+}

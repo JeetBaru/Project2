@@ -32,7 +32,18 @@
 #include "logger.h"
 #include "cirbuff.h"
 
+void initialize(){
+	circ_ptr = (circ_buff *)malloc(sizeof(circ_buff));
+	initialize_buffer(circ_ptr,500);
+	circ_pre = (circ_buff *)malloc(sizeof(circ_buff));
+	initialize_buffer(circ_pre,16);
+	log1 = (log *)malloc(sizeof(log));
+	uartinit();
 
+	LOG_IT(log1,LOGGER_INITIALIZED,1,0);
+
+	LOG_IT(log1,SYSTEM_INITIALIZED,1,0);
+}
 
 int main(void)
 {
@@ -49,16 +60,13 @@ int main(void)
 	*/
 
 	//uint8_t data [] = "123456789";
-	//uint32_t length = 3;
+	//uint32_t length = 9;
 	//uint8_t * ptr = data;
-	circ_ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(circ_ptr,500);
-	circ_pre = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(circ_pre,16);
-	log1 = (log *)malloc(sizeof(log));
-	uartinit();
-	create_log_item(log1,SYSTEM_INITIALIZED,1,0);
-	log_item(log1);
+
+	//create_log_item(log1,LOGGER_INITIALIZED,1,0);
+	//log_item(log1);
+
+	initialize();
 	//log_data(ptr, length);
 	//log_string(ptr);
 	//log_integer(0x33);
@@ -70,42 +78,27 @@ int main(void)
 	//int8_t c [20];
 	//int8_t * pt;
 	//pt=c;
-	create_log_item(log1,INFO,1,"ENTER ONLY 16 CHARACTERS");
-	log_item(log1);
+	LOG_IT(log1,INFO,1,"ENTER ONLY 16 CHARACTERS");
 
-	while(1){
-		if(is_buffer_full(circ_pre)==NO && (UART0_S1 & 40)){
-			UART0_C2 |= 0x20;
-			__enable_irq();
-		}
-		else if(is_buffer_full(circ_pre)==FULL){
-			__disable_irq();
-			break;
-		}
-	}
+	recieve_n_bytes();
 
-	create_log_item(log1,WARNING,1,"RECIEVE BUFFER FULL");
-	log_item(log1);
+	LOG_IT(log1,WARNING,1,"RECIEVE BUFFER FULL");
 
 	*((circ_pre->tail)+16)='\0';
 
-	create_log_item(log1,DATA_RECIEVED,1,circ_pre->tail);
-	log_item(log1);
+	LOG_IT(log1,INFO,1,"RECIEVED DATA :- ");
 
-	create_log_item(log1,DATA_ANALYSIS_STARTED,1,0);
-	log_item(log1);
+	LOG_IT(log1,DATA_RECIEVED,1,circ_pre->buff);
+
+	LOG_IT(log1,INFO,1,"DATA ANALYSIS STARTED :- ")
 
 	analyse_data(circ_pre->tail);
 
-	create_log_item(log1,DATA_ANALYSIS_COMPLETED,1,0);
-	log_item(log1);
+	LOG_IT(log1,INFO,1,"DATA ANALYSIS COMPLETED :- ");
 
+	LOG_IT(log1,INFO,1,"FLUSHING RECIEVE BUFFER :- ");
 
-	while(is_buffer_empty(circ_pre)==NO){
-		UART0_C2 |= 0x80;
-		add_item(circ_ptr,remove_item(circ_pre));
-		__enable_irq();
-	}
+	log_flush(circ_pre);
 	/*
 	create_log_item(log1,DATA_ANALYSIS_STARTED,1,0);
 	log_item(log1);
