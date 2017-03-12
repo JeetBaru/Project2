@@ -104,7 +104,7 @@ int8_t my_rev(uint8_t * ptr,uint32_t length)
 	{
 		l=(length-1)/2;
 	}
-	int8_t i;
+	int32_t i;
 	int8_t temp;
 	for(i=0;i<=l;i++)
 	{

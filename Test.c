@@ -398,14 +398,11 @@ void test_CheckEvenReverse(void **state)
 *********************************************************************************************************************************/
 void test_reverse_CheckCharacters(void **state)
 {	
-	uint8_t i, length = 255;
-	uint8_t set_2[255];				//created an array of 255 length
-	for (i=0; i<length; i++)			//passed character 'a' to each position in the array
-	{
-		set_2[i] = 'a';
-	}		
+	uint8_t i; 
+	//uint32_t length = 255;
+	uint8_t set_2[]= "aobnuadh?/!";
   	uint8_t *ptr = set_2;
-  	enum rt status= my_rev(ptr, length);		//checkes whether the given array could be reversed by the reverse function
+  	enum rt status= my_rev(ptr, 16);		//checkes whether the given array could be reversed by the reverse function
   	assert_int_equal(status, SUCCESS);
 }
 
@@ -435,7 +432,7 @@ void test_Allocate_Free(void **state)
 			This function checks whether the passed (ptr which is a structure pointer type)
 			is valid or not by using cmocka unit test framework.
 *	parameters:
-			The function call is_buffer_empty has the function parameter count and ptr which is a 
+			The function call is_buffer_empty has the function parameter ptr which is a 
 			structure pointer
 *	returns:
 			compares the status of the enum for the test condition and returns pass or fail when we 
@@ -446,7 +443,7 @@ void test_Invalid_Pointer(void **state)
  	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
 	ptr = 0;					  //null pointer is passed for Invalid pointer condition
-  	enum rt status = is_buffer_empty(ptr, 5);
+  	enum rt status = is_buffer_empty(ptr);
   	assert_int_equal(status, INVALID_POINTER);
 }
 
@@ -476,7 +473,7 @@ void test_Non_Initialised_Buffer(void **state)
 			This function checks whether the buffer is full by calling is_buffer_full
 			in the function definition, and with the help of cmocka unit test framework
 *	parameters:
-			The function call is_buffer_full has the function parameter size, count and ptr which is a 
+			The function call is_buffer_full has the function parameter ptr which is a 
 			structure pointer
 		
 *	returns:
@@ -487,7 +484,12 @@ void test_Buffer_Full(void **state)
 {
   	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-  	enum rt status= is_buffer_full(ptr, 10, 10);
+	initialize_buffer(ptr,4);
+	for (uint8_t i=0; i<4; i++)
+	{
+		add_item(ptr,i);
+	}
+  	enum rt status= is_buffer_full(ptr);
   	assert_int_equal(status, FULL);
 }
 /*********************************************************************************************************
@@ -496,7 +498,7 @@ void test_Buffer_Full(void **state)
 			This function checks whether the buffer is empty by calling is_buffer_empty in the 
 			function definition and with the help of cmocka unit test framework
 *	parameters:
-			The function call is_buffer_empty has the function parameter count and ptr which is a 
+			The function call is_buffer_empty has the function parameter ptr which is a 
 			structure pointer
 		
 *	returns:
@@ -507,7 +509,8 @@ void test_Buffer_empty(void **state)
 {
   	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-  	enum rt status= is_buffer_empty(ptr, 0);
+	initialize_buffer(ptr,10);
+  	enum rt status= is_buffer_empty(ptr);
   	assert_int_equal(status, EMPTY);
 }
 /*********************************************************************************************************
@@ -528,8 +531,12 @@ void test_wrap_add (void **state)
 { 
   	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(ptr, 10);				
-  	enum rt status= add_item(ptr,5);
+	initialize_buffer(ptr, 4);		
+	for (uint8_t i=0; i<3; i++){
+		add_item(ptr, i);
+	}
+		
+  	enum rt status= add_item(ptr,4);
   	assert_int_equal(status, WRAP_AROUND_SUCCESS);
 }
 /*********************************************************************************************************
@@ -539,7 +546,7 @@ void test_wrap_add (void **state)
 			in the function definition, and with the help of cmocka unit test framework. Here the function 
 			initialize_buffer is called before calling remove_item
 *	parameters:
-			The function call remove_item has the function count and ptr which is a 
+			The function call remove_item has the function ptr which is a 
 			structure pointer
 		
 *	returns:
@@ -548,11 +555,16 @@ void test_wrap_add (void **state)
 *********************************************************************************************************/
 void test_wrap_remove (void **state)
 { 
-
+	
   	circ_buff * ptr;
   	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-  	initialize_buffer(ptr, 10);
-  	enum rt status= remove_item(ptr,0);
+  	initialize_buffer(ptr, 4);
+	for (uint8_t i=0 ; i<3 ; i++){
+		add_item(ptr, i);
+		remove_item(ptr);
+	}
+	add_item(ptr, 4);
+  	enum rt status= remove_item(ptr);
   	assert_int_equal(status, WRAP_AROUND_SUCCESS);
 
 }
@@ -563,7 +575,7 @@ void test_wrap_remove (void **state)
 		     	The initialize_buffer is first called and then is_buffer_full is called for checking the 
 		     	test condition.
 *	parameters:
-			The function call is_buffer_full has the function parameter size, count and ptr which is a 
+			The function call is_buffer_full has the function parameter ptr which is a 
 			structure pointer
 		
 *	returns:
@@ -574,10 +586,12 @@ void test_overfill (void **state)
 { 
 	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(ptr, 10);
-	ptr->head = ptr->buff+ptr->size;			//head is pointed to last position in the circular buffer
+	initialize_buffer(ptr, 4);
+	for (uint8_t i=0; i<4; i++)
+		add_item(ptr,i);
+	ptr->head= ptr->buff;//head is pointed to last position in the circular buffer
 	//at this condition buffer will be full and any element added should go to overfill condition
-	enum rt status = is_buffer_full(ptr,10,10);
+	enum rt status = is_buffer_full(ptr);
   	assert_int_equal(status, FULL);
 }
 /*********************************************************************************************************
@@ -587,7 +601,7 @@ void test_overfill (void **state)
 		     	The initialize_buffer is first called and then is_buffer_empty is called for checking the 
 		     	test condition.
 	parameters:
-		   	The function call is_buffer_empty has the function parameter count and ptr which is the 
+		   	The function call is_buffer_empty has the function parameter ptr which is the 
 		   	structure pointer
 *	returns:
 			compares the status of the enum for the test condition and returns pass or fail when we 
@@ -602,7 +616,7 @@ void test_overempty(void **state)
 	ptr->head = ptr->buff;                                                   
 	//at this point buffer will be empty and any item to be removed at this condition will give
 	//overempty condition
-	enum rt status = is_buffer_empty(ptr,0);
+	enum rt status = is_buffer_empty(ptr);
   	assert_int_equal(status, EMPTY);
 }
 /*********************************************************************************************************
@@ -632,7 +646,7 @@ void test_Add_remove(void **state)
 	}
 	
 }
-//
+
 int main(int argc, char **argv)
 {
 	time_t rawtime;
@@ -642,6 +656,10 @@ int main(int argc, char **argv)
   	timeinfo = localtime ( &rawtime );
   	printf ( "Execution time and date: %s", asctime (timeinfo) );  //invoked time.h to report current execution time and date
   const struct CMUnitTest tests[] = {
+	cmocka_unit_test(test_big_to_little_Invalid_Pointer),
+    	cmocka_unit_test(test_big_to_little_Valid_condition),
+    	cmocka_unit_test(test_little_to_big_Invalid_Pointer),
+    	cmocka_unit_test(test_little_to_big_Valid_condition),
     	cmocka_unit_test(test_memmove_Invalid_Pointer),
     	cmocka_unit_test(test_memmove_NoOverlap),
     	cmocka_unit_test(test_memove_SRC_in_DST),
@@ -663,11 +681,8 @@ int main(int argc, char **argv)
     	cmocka_unit_test(test_wrap_remove),
     	cmocka_unit_test(test_overfill),
     	cmocka_unit_test(test_overempty),
-    	cmocka_unit_test(test_Add_remove),
-    	cmocka_unit_test(test_big_to_little_Invalid_Pointer),
-    	cmocka_unit_test(test_big_to_little_Valid_condition),
-    	cmocka_unit_test(test_little_to_big_Invalid_Pointer),
-    	cmocka_unit_test(test_little_to_big_Valid_condition)
+    	cmocka_unit_test(test_Add_remove)
+    	
   };
 
   return cmocka_run_group_tests(tests, NULL, NULL);

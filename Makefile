@@ -26,7 +26,7 @@ ifeq ($(TEST), data)
 else 
 #source files when nothing is specified 
 	LIB_SRCS = data.c memory.c cirbuff.c
-	EXE = Test.out
+	#EXE = Test.out
 	TEST_QUADRATIC_EXE = Test.out
 	TEST_QUADRATIC_SRCS = Test.c
 endif
@@ -129,10 +129,10 @@ test : $(TEST_QUADRATIC_EXE)
 $(TEST_QUADRATIC_EXE) : $(TEST_QUADRATIC_SRCS) $(LIB)
 	$(CC) $(CFLAGS) -o $@ $^ $(CMOCKA_LIBRARY) 
 
-test-bbb : main.c logger.c analysedata.c cirbuff.c
+log-bbb : log/main.c log/logger.c log/analysedata.c log/cirbuff.c
 	arm-linux-gnueabihf-gcc -DVERBOSE -w $^ -o log.out
 
-test-host : main.c logger.c analysedata.c cirbuff.c
+log-host : log/main.c log/logger.c log/analysedata.c log/cirbuff.c
 	gcc -DVERBOSE -w $^ -o log.out
 	
 .PHONY : clean
