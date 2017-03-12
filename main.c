@@ -28,9 +28,11 @@
  */
 #ifndef VERBOSE
 	#include "MKL25Z4.h"
+	#include "uart.h"
+#else
+	#include <stdio.h>
 #endif
 #include <stdlib.h>
-#include "uart.h"
 #include "logger.h"
 #include "cirbuff.h"
 #include "analysedata.h"
@@ -43,7 +45,10 @@ void initialize(){
 	circ_pre = (circ_buff *)malloc(sizeof(circ_buff));
 	initialize_buffer(circ_pre,16);
 	log1 = (log *)malloc(sizeof(log));
-	uartinit();
+	
+	#ifndef VERBOSE
+		uartinit();
+	#endif
 
 	LOG_IT(log1,LOGGER_INITIALIZED,1,0);
 
@@ -85,8 +90,21 @@ int main(void)
 	//pt=c;
 	LOG_IT(log1,INFO,1,"ENTER ONLY 16 CHARACTERS");
 
-	recieve_n_bytes();
-
+	#ifndef VERBOSE
+		recieve_n_bytes();
+	#else
+	{
+		int8_t i=0;
+		int8_t data [] = "JeetBaruJeetBaruBoss";
+		while(is_buffer_full(circ_pre)!=FULL)
+		{
+			//scanf("%d",&data);
+			add_item(circ_pre,data[i]);
+			i++;
+		}
+	}
+	#endif 
+			
 	LOG_IT(log1,WARNING,1,"RECIEVE BUFFER FULL");
 
 	*((circ_pre->tail)+16)='\0';

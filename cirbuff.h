@@ -8,6 +8,8 @@
 #ifndef _CIRBUFF_H_
 #define _CIRBUFF_H_
 
+#include <stdint.h>
+
 typedef struct circ_buff_t{
 	uint8_t * buff;
 	uint8_t * head;

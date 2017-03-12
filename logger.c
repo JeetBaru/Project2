@@ -1,7 +1,8 @@
 
 //logger.c
-
-# include "uart.h"
+#ifndef VERBOSE
+	# include "uart.h"
+#endif
 # include "cirbuff.h"
 # include "logger.h"
 # include "analysedata.h"
@@ -30,7 +31,7 @@ void log_data(uint8_t * ptr,uint32_t length)
 
 		}
 		#ifdef VERBOSE
-			while(is_buffer_empty(circ_ptr)!=0)
+			while(is_buffer_empty(circ_ptr)!=EMPTY)
 			{
 				printf("%c",remove_item(circ_ptr));
 			}
@@ -85,26 +86,16 @@ void log_integer(int32_t data)
 	log_string(ptr);
 }
 
-void log_flush(circ_pre)
+void log_flush(circ_buff * circ_pre)
 {
 	while(is_buffer_empty(circ_pre)!=EMPTY){
 		uint8_t D = remove_item(circ_pre);
-		add_item(circ_ptr, D);
-		UART0_C2 |= 0x80;
-		__enable_irq();
-	}
-}
-
-void UART0_IRQHandler()
-{
-	__disable_irq();
-	if(UART0_C2 & 0x80)
-	{
-		send_n_bytes();
-	}
-	else if (UART0_C2 & 0x20)
-	{
-		UART0_C2 &= 0xDF;
-		add_item(circ_pre,UART0_D);
+		#ifndef VERBOSE
+			add_item(circ_ptr, D);
+			UART0_C2 |= 0x80;
+			__enable_irq();
+		#else
+			printf("%c",D);
+		#endif
 	}
 }

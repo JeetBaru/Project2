@@ -5,7 +5,9 @@
  *      Author: Jeet
  */
 #include "logger.h"
-#include "uart.h"
+#ifndef VERBOSE
+	#include "uart.h"
+#endif
 #include "analysedata.h"
 #include <stdint.h>
 

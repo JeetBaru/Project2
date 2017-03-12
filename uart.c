@@ -124,6 +124,20 @@ void send_n_bytes()
 	}
 }
 
+void UART0_IRQHandler()
+{
+	__disable_irq();
+	if(UART0_C2 & 0x80)
+	{
+		send_n_bytes();
+	}
+	else if (UART0_C2 & 0x20)
+	{
+		UART0_C2 &= 0xDF;
+		add_item(circ_pre,UART0_D);
+	}
+}
+
 
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
