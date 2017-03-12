@@ -1,0 +1,9 @@
+/home/sudeep03799/New2/libraries/build-Debug/lib/pkgconfig/cmocka.pc
+/home/sudeep03799/New2/libraries/build-Debug/lib/cmake/cmocka/cmocka-config.cmake
+/home/sudeep03799/New2/libraries/build-Debug/lib/cmake/cmocka/cmocka-config-version.cmake
+/home/sudeep03799/New2/libraries/build-Debug/include/cmocka.h
+/home/sudeep03799/New2/libraries/build-Debug/include/cmocka_pbc.h
+/home/sudeep03799/New2/libraries/build-Debug/lib/libcmocka.so.0.4.0
+/home/sudeep03799/New2/libraries/build-Debug/lib/libcmocka.so.0
+/home/sudeep03799/New2/libraries/build-Debug/lib/libcmocka.so
+/home/sudeep03799/New2/libraries/build-Debug/lib/libcmocka.a

@@ -1,0 +1,6 @@
+Name: cmocka
+Description: The cmocka unit testing library
+Version: 1.1.0
+Libs: -L/home/sudeep03799/New2/libraries/build-Debug/lib -lcmocka
+Cflags: -I/home/sudeep03799/New2/libraries/build-Debug/include
+
