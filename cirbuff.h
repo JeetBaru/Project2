@@ -5,11 +5,8 @@
  *      Author: Jeet
  */
 
-#ifndef CIRBUFF_H_
-#define CIRBUFF_H_
-
-#ifndef SOURCES_CIRBUFF_H_
-#define SOURCES_CIRBUFF_H_
+#ifndef _CIRBUFF_H_
+#define _CIRBUFF_H_
 
 typedef struct circ_buff_t{
 	uint8_t * buff;
@@ -32,8 +29,6 @@ void initialize_buffer(circ_buff * cb1, uint32_t size);
 void destroy_buffer(circ_buff * cb1);
 void add_item(circ_buff * cb1, uint8_t data);
 uint8_t remove_item(circ_buff * cb1);
-
-#endif
 
 
 #endif /* CIRBUFF_H_ */

@@ -26,13 +26,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-
-#include "MKL25Z4.h"
+#ifndef VERBOSE
+	#include "MKL25Z4.h"
+#endif
 #include "uart.h"
 #include "logger.h"
 #include "cirbuff.h"
+#include "analysedata.h"
+#include <stdint.h>
 
 void initialize(){
+
 	circ_ptr = (circ_buff *)malloc(sizeof(circ_buff));
 	initialize_buffer(circ_ptr,500);
 	circ_pre = (circ_buff *)malloc(sizeof(circ_buff));

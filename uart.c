@@ -31,63 +31,52 @@
 #include "logger.h"
 #include "cirbuff.h"
 
+#define FLL_CLOCK_MASK 0x04000000
+#define CLOCK_GATE_ENABLE 0x00000400
+#define ZERO_OUT 0x0
+#define OSR_MASK 0x0F
+#define BDH_MASK 0x00
+#define BDL_MASK 0x17
+#define NVIC_ISER_MASK 0x00001000
+#define RX_TX_ENABLE 0x0C
+#define ENABLE_PORTA_CLK 0x200
+#define PORTA_UART_PINENABLE 0x200
+#define DATA_RECIEVED 0x20
+#define DATA_TRANSMIT_READY 0x80
+#define DATA_TRANSMITTED 0x40
+
 
 void uartinit()
 {
-	//SIM_SOPT2 &= 0xF7FFFFFF;
+	SIM_SOPT2 |= FLL_CLOCK_MASK;   //select clock as MCGFLLCLK
 
+	SIM_SCGC4 |= CLOCK_GATE_ENABLE;  //Enable clock gate
 
-	SIM_SOPT2 |= 0x04000000;   //select clock as MCGFLLCLK
+	UART0_C2 = ZERO_OUT;
 
-	SIM_SCGC4 |= 0x00000400;  //Enable clock gate
+	UART0_C1 = ZERO_OUT;
 
-	//SIM_SOPT5 &= 0xFFFEFFFB;
-	UART0_C2 = 0x00;
+	UART0_C4 = OSR_MASK;
 
-	UART0_C4 = 0x0F;
+	UART0_BDH = BDH_MASK;
+	UART0_BDL = BDL_MASK;
 
-	UART0_C1 = 0x00;
+	NVIC->ISER[0] |= NVIC_ISER_MASK;
 
-	UART0_BDH = 0x00;
-	UART0_BDL = 0x17;
+	UART0_C2 = RX_TX_ENABLE;
 
-	NVIC->ISER[0] |= 0x00001000;
-
-	UART0_C2 = 0x0C;
-
-	SIM_SCGC5 |= 0x200;  //Enable PORT A Clock
-	PORTA_PCR1=0x200;
-	PORTA_PCR2=0x200;
+	SIM_SCGC5 |= ENABLE_PORTA_CLK;  //Enable PORT A Clock
+	PORTA_PCR1=PORTA_UART_PINENABLE;
+	PORTA_PCR2=PORTA_UART_PINENABLE;
 
 	LOG_IT(log1,GPIO_INITIALIZED,1,0);
 
 }
-/*
-void uartinittx()
-{
-	SIM_SOPT2 |= 0x04000000;   //select clock as MCGFLLCLK
-	//SIM_SOPT2 &= 0xF7FFFFFF;
 
-	SIM_SCGC4 |= 0x00000400;   //Enable clock gate
-	//SIM_SOPT5 &= 0xFFFEFFFC;
-
-	UART0_C2 = 0x00;
-
-	UART0_BDH = 0x00; //baud 57600
-	UART0_BDL = 0x17;
-
-	UART0_C4 = 0x0F;
-	UART0_C1 = 0x00;
-	UART0_C2 = 0x0C;
-
-	SIM_SCGC5 |= 0x200;  //Enable PORTA clock
-	PORTA_PCR2=0x200;
-}
-*/
 void sendbyte(uint8_t data)
 {
 	uartinit();
-	while(!(UART0_S1 & 0x80)){}
+	while(!(UART0_S1 & DATA_TRANSMIT_READY)){}
 	UART0_D=data;
 }
 
@@ -95,7 +84,7 @@ uint8_t recievebyte()
 {
 	uartinit();
 	uint8_t c;
-	while(!(UART0_S1 & 0x20));
+	while(!(UART0_S1 & DATA_RECIEVED));
 	c=UART0_D;
 	return c;
 }
@@ -106,7 +95,7 @@ void sendnbytes(int8_t * ptr, int32_t l)
 	int32_t i;
 	for(i=0;i<l;i++)
 	{
-		while(!(UART0_S1 & 0x80));
+		while(!(UART0_S1 & DATA_TRANSMIT_READY));
 		UART0_D=*ptr;
 		ptr++;
 	}
@@ -116,7 +105,7 @@ void recieve_n_bytes()
 {
 	while(1){
 		if(is_buffer_full(circ_pre)==NO && (UART0_S1 & 40)){
-			UART0_C2 |= 0x20;
+			UART0_C2 |= DATA_RECIEVED;
 			__enable_irq();
 		}
 		else if(is_buffer_full(circ_pre)==FULL){
@@ -126,21 +115,18 @@ void recieve_n_bytes()
 	}
 }
 
-/*
-int main(void)
+void send_n_bytes()
 {
-	uartinittx();
-	int8_t d[] ="12345678";
-	int8_t * ptr = d;
-	sendnbytes(ptr, 8);
-	uartinitrx();
-	uint8_t data = recievebyte();
-	//int8_t  = 0x11;
-	uartinittx();
-	sendbyte(data);
-	return 0;
+	UART0_C2 &= 0x7F;
+	UART0_D = remove_item(circ_ptr);
+	if(is_buffer_empty(circ_ptr) != EMPTY)
+	{
+		UART0_C2 |= 0x80;
+		__enable_irq();
+	}
 }
-*/
+
+
 ////////////////////////////////////////////////////////////////////////////////
 // EOF
 ////////////////////////////////////////////////////////////////////////////////
