@@ -4,40 +4,36 @@
  *  Created on: Mar 12, 2017
  *      Author: Jeet
  */
-#include "logger.h"
-#ifndef VERBOSE
-	#include "uart.h"
-#endif
 #include "analysedata.h"
-#include <stdint.h>
 
+//this function is used to analyse entered data
 void analyse_data(int8_t * c)
 {
-	LOG_IT(log1,DATA_ANALYSIS_STARTED,1,0);
+	LOG_IT(log1,DATA_ANALYSIS_STARTED,1,0);							//Logs begining of data analysis
 
-	int8_t w=0,x=0,y=0,z=0;
+	int8_t w=0,x=0,y=0,z=0;											//initialize counter to 0
 	while(*c != '\0'){
 		if(*c=='"' || *c==',' || *c=='.' || *c=='?' || *c=='!' || *c==':' || *c==';')
-			(w)++;
+			(w)++;													//check for punctuation marks
 		else if(*c>=0x30 && *c<=0x39)
-			(x)++;
+			(x)++;													//check for numericals
 		else if((*c>=0x41 && *c<=0x5A) || (*c>=0x61 && *c<=0x7A))
-			(y)++;
+			(y)++;													//check for letters both upper and lower case
 		else
-			(z)++;
+			(z)++;													//count miscellaneous characters
 		c++;
 	}
 
 	int8_t arr [5];
 	int8_t * p = arr;
 
-	LOG_IT(log1,DATA_ALPHA_COUNT,1,my_itoa(p,y,16));
+	LOG_IT(log1,DATA_ALPHA_COUNT,1,my_itoa(p,y,16));				//log the number of alphabets by converting int to ascii
 
-	LOG_IT(log1,DATA_NUMERIC_COUNT,1,my_itoa(p,x,16));
+	LOG_IT(log1,DATA_NUMERIC_COUNT,1,my_itoa(p,x,16));				//log the number of numerics by converting int to ascii
 
-	LOG_IT(log1,DATA_PUNCTUATION_COUNT,1,my_itoa(p,w,16));
+	LOG_IT(log1,DATA_PUNCTUATION_COUNT,1,my_itoa(p,w,16));			//log the number of punctuations by converting int to ascii
 
-	LOG_IT(log1,DATA_MISC_COUNT,1,my_itoa(p,z,16));
+	LOG_IT(log1,DATA_MISC_COUNT,1,my_itoa(p,z,16));					//log the number of other characters by converting int to ascii
 
 	LOG_IT(log1,DATA_ANALYSIS_COMPLETED,1,0);
 }

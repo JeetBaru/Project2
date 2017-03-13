@@ -8,6 +8,12 @@
 #ifndef _ANALYSEDATA_H_
 #define _ANALYSEDATA_H_
 
+#include "logger.h"
+#ifndef VERBOSE
+	#include "uart.h"
+#endif
+#include <stdint.h>
+
 void analyse_data(int8_t * c);
 int8_t * my_itoa(int8_t * str, int32_t data, int32_t base);
 

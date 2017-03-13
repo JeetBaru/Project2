@@ -9,7 +9,12 @@
 #define _LOGGER_H_
 
 #include <stdint.h>
-#include "cirbuff.h"
+#ifndef VERBOSE
+	# include "MKL25Z4.h"
+	# include "uart.h"
+#endif
+# include "cirbuff.h"
+# include "analysedata.h"
 
 typedef struct log_t{
 	int8_t logid;
@@ -20,13 +25,14 @@ typedef struct log_t{
 log * log1;
 
 typedef enum log_status_t{
-	LOGGER_INITIALIZED=1, GPIO_INITIALIZED, SYSTEM_INITIALIZED, SYSTEM_HALTED, INFO, WARNING,
-	ERROR, DATA_RECIEVED, DATA_ANALYSIS_STARTED, DATA_ALPHA_COUNT, DATA_NUMERIC_COUNT, DATA_PUNCTUATION_COUNT,
+	LOGGER_INITIALIZED, GPIO_INITIALIZED, SYSTEM_INITIALIZED, SYSTEM_HALTED, INFO, WARNING,
+	ERROR, DAT_RECIEVED, DATA_ANALYSIS_STARTED, DATA_ALPHA_COUNT, DATA_NUMERIC_COUNT, DATA_PUNCTUATION_COUNT,
 	DATA_MISC_COUNT, DATA_ANALYSIS_COMPLETED
 }status;
 
 void log_data(uint8_t * ptr,uint32_t length);
 void log_string(int8_t * ptr);
+void log_integer(int32_t data);
 void create_log_item(log * logptr, status log_id, int32_t length, int8_t * ptr);
 void destroy_log_item(log * log1);
 void log_item(log * logptr);
