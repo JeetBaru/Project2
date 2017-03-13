@@ -50,8 +50,8 @@
 void test_Allocate_Free(void **state)
 { 
 	circ_buff * ptr;
-	ptr = (circ_buff *)malloc(sizeof(circ_buff));     //size allocated to the structure pointer
-  	enum rt status = CircBuf_size(ptr);
+	ptr = (circ_buff *)malloc(sizeof(circ_buff));     	//size allocated to the structure pointer
+  	enum rt status = CircBuf_size(ptr);			//checks whether the buffer is initialised
   	assert_int_equal(status, SUCCESS);
 }
 /*********************************************************************************************************
@@ -70,8 +70,8 @@ void test_Invalid_Pointer(void **state)
 {
  	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	ptr = 0;					  //null pointer is passed for Invalid pointer condition
-  	enum rt status = is_buffer_empty(ptr);
+	ptr = 0;					  	//null pointer is passed for Invalid pointer condition
+  	enum rt status = is_buffer_empty(ptr);			//checks whether the buffer is empty	
   	assert_int_equal(status, INVALID_POINTER);
 }
 
@@ -92,7 +92,7 @@ void test_Non_Initialised_Buffer(void **state)
 {
   	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-  	enum rt status= initialize_buffer(ptr,10);	//initialised_buffer is called to check if it is initialised or not
+  	enum rt status= initialize_buffer(ptr,10);		//initialised_buffer is called to check if it is initialised or not
  	assert_int_equal(status, SUCCESS);
 }
 /*********************************************************************************************************
@@ -111,13 +111,13 @@ void test_Non_Initialised_Buffer(void **state)
 void test_Buffer_Full(void **state)
 {
   	circ_buff * ptr;
-	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(ptr,4);
+	ptr = (circ_buff *)malloc(sizeof(circ_buff));		
+	initialize_buffer(ptr,4);				//initialzed the buffer with size 4
 	for (uint8_t i=0; i<4; i++)
 	{
-		add_item(ptr,i);
+		add_item(ptr,i);				//4 items added so that the buffer will be full
 	}
-  	enum rt status= is_buffer_full(ptr);
+  	enum rt status= is_buffer_full(ptr);			//checks whether the buffer is full
   	assert_int_equal(status, FULL);
 }
 /*********************************************************************************************************
@@ -137,8 +137,8 @@ void test_Buffer_empty(void **state)
 {
   	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(ptr,10);
-  	enum rt status= is_buffer_empty(ptr);
+	initialize_buffer(ptr,10);				//buffer initialized so count=0 and hence the buffer will be empty
+  	enum rt status= is_buffer_empty(ptr);			//checks whether the buffer is empty
   	assert_int_equal(status, EMPTY);
 }
 /*********************************************************************************************************
@@ -160,11 +160,11 @@ void test_wrap_add (void **state)
   	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
 	initialize_buffer(ptr, 4);		
-	for (uint8_t i=0; i<3; i++){
+	for (uint8_t i=0; i<3; i++){				//3 items are added in the circular buffer of size 4
 		add_item(ptr, i);
 	}
 		
-  	enum rt status= add_item(ptr,5);
+  	enum rt status= add_item(ptr,5);			//4th item is added hence the unit test will give WRAP_AROUND_SUCCESS
   	assert_int_equal(status, WRAP_AROUND_SUCCESS);
 }
 /*********************************************************************************************************
@@ -187,12 +187,12 @@ void test_wrap_remove (void **state)
   	circ_buff * ptr;
   	ptr = (circ_buff *)malloc(sizeof(circ_buff));
   	initialize_buffer(ptr, 4);
-	for (uint8_t i=0 ; i<3 ; i++){
+	for (uint8_t i=0 ; i<3 ; i++){				//3 items are added and then the added items are removed 
 		add_item(ptr, i);
 		remove_item(ptr);
 	}
-	add_item(ptr, 4);
-  	enum rt status= remove_item(ptr);
+	add_item(ptr, 4);					//4th item is added to the 4 size buffer
+  	enum rt status= remove_item(ptr);			//removing 4th item will give WRAP_AROUND_SUCCESS
   	assert_int_equal(status, WRAP_AROUND_SUCCESS);
 
 }
@@ -214,9 +214,9 @@ void test_overfill (void **state)
 { 
 	circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(ptr, 4);
+	initialize_buffer(ptr, 4);				//created a circular buffer of size 4
 	for (uint8_t i=0; i<4; i++)
-		add_item(ptr,i);
+		add_item(ptr,i);				//4 items added and when tried adding more overfill
 	//head is pointed to last position in the circular buffer
 	//at this condition buffer will be full and any element added should go to overfill condition
 	enum rt status = is_buffer_full(ptr);
@@ -239,12 +239,12 @@ void test_overempty(void **state)
 {  
         circ_buff * ptr;
 	ptr = (circ_buff *)malloc(sizeof(circ_buff));
-	initialize_buffer(ptr, 0);
+	initialize_buffer(ptr, 4);					//intialized buffer with 4 length  
 	//the head has to be at the buff position for the buffer empty condition
 	ptr->head = ptr->buff;                                                   
 	//at this point buffer will be empty and any item to be removed at this condition will give
 	//overempty condition
-	enum rt status = is_buffer_empty(ptr);
+	enum rt status = is_buffer_empty(ptr);				//removing more will be overempty
   	assert_int_equal(status, EMPTY);
 }
 /*********************************************************************************************************
@@ -281,6 +281,7 @@ int main()
   	struct tm * timeinfo;
   	time ( &rawtime );
   	timeinfo = localtime ( &rawtime );
+	printf("Test Environment : cmocka\n");
   	printf ( "Execution time and date: %s", asctime (timeinfo) ); //invoked time.h to report current execution time and date
 
   const struct CMUnitTest tests[] = {

@@ -326,6 +326,7 @@ int main(int argc, char **argv)
   	struct tm * timeinfo;
   	time ( &rawtime );
   	timeinfo = localtime ( &rawtime );
+	printf("Test Environment : cmocka\n");
   	printf ( "Execution time and date: %s", asctime (timeinfo) );   //invoked time.h to report current execution time and date
   const struct CMUnitTest tests[] = {
     	cmocka_unit_test(test_memmove_Invalid_Pointer),
