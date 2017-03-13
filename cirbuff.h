@@ -10,7 +10,7 @@
 *   by express written agreement with the Authors.
 *
 *
-*   Authors: Sudeep Kulkarniirlekar and Jeet BAru
+*   Authors: Sudeep Kulkarniirlekar and Jeet Baru
 *   Date Edited: 12 March 2017
 *
 *   Description: Source file for implementing Circular buffer functions

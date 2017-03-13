@@ -131,6 +131,9 @@ log-bbb : log/main.c log/logger.c log/analysedata.c log/cirbuff.c
 log-host : log/main.c log/logger.c log/analysedata.c log/cirbuff.c
 	gcc -DVERBOSE -w $^ -o log.out
 	
+no-log : log/main.c log/logger.c log/analysedata.c log/cirbuff.c
+	gcc -DVERBOSE -DNOLOG -w $^ -o log.out
+	
 .PHONY : clean
 clean : FORCE
 	-rm -rf *~ *.o *.out $(LIB) $(EXE) $(TEST_TEST_EXE) *.dSYM/

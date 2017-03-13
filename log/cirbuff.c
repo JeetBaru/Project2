@@ -1,3 +1,31 @@
+
+/**************************************************************************************
+*   File: cirbuff.h
+*
+*   Copyrights 2016  Sudeep Kulkarniirlekar and Jeet Baru
+*   All Rights Reserved
+*
+*
+*   The information contained herein is property of the Authors. 
+*   The copying and distribution of the files is prohibited except
+*   by express written agreement with the Authors.
+*
+*
+*   Authors: Sudeep Kulkarniirlekar and Jeet Baru
+*   Date Edited: 12 March 2017
+*
+*   Description: Source file for implementing Circular buffer functions
+*              - CircBuf_size 
+*              - is_buffer_full
+*	       - is_buffer_empty
+*              - initialize_buffer
+*              - destroy_buffer
+*              - add_item
+*              - remove_item
+*	       - cirbuf_peak
+*
+****************************************************************************************/
+
 # include "cirbuff.h"
 
 //allocates size to the buffer
