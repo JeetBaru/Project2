@@ -62,7 +62,29 @@ Total - 26 tests (stdlib, stdio, stdarg, stddef, setjmp, cmocka libraries includ
 --------------------------------------------------------Makefile--------------------------------------------------------------
 Changed the path of THIRD_PARTY_DIR to libraries. Then added the conditional loop which will select the source file on which the unit tests need to be performed. If TEST="data" then "make test" will run uint tests of test_data.c for TEST="memory" test_memory.c and if nothing is specified the same command will give all unit tests for all the test.cs. This make file also has log-host and log-bbb.
 
-							
+---------------------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------Logger Application------------------------------------------------------------------
+The logger application has main use of interacting with devices that do not support standard input output functions like FRDM. For this we have written c programs stored in the folder named log. Description of each C file is given below
+
+UART.c/h
+In this C file we have written functions that help us to communicate to and from the device using UART. We have functions that can do this by both polling as well as interrupts. UART_init() is used to initialize the UART0 at PINS 1 and 2 of port A. Function sendbyte, receivebyte, sendnbyte use polling to transmit and receive data. send_n_bytes() receive_n_bytes() use interrputs to achieve the same objective. We have also written an IRQ handler to manage interrupts.
+
+cirbuff.c
+Refer to the previous explanation. 
+
+analysedata.c
+This c file includes functions that perform important data calculations in order to obtain the functionality of identifying the input characters as alphabets, numbers, punctuations and misc. This is done by the function name analyse_data(). Another function defined in this c file is my_itoa(). Here data, base, destination address are passed as parameters and the function returs the starting address of the destination. This function converts the given data into an ascii string, while also converting the number into the specified base. The string stored at the destination address is null terminated.
+
+Logger.c 
+This the most essential part of the whole application the functions in the c file are used to log different kinds of data strings, integer or just generic data. The function log_data(), takes a data pointer and length as parameters and logs the data uptil specified length using UART for FRDM and Printf for the host machine. Function log_string() does not have length as its parameteres and hence it calculates the length uptil the null character. Now the pointer and length are passed to log_data(). 
+log_integer() converts an input integer data to an ascii string whose starting address is passed log_string(). log_flush() is used to flush out data from any given circular buffer through the transmit buffer and hence displaying contents of the buffer via UART for FRDM and printf for host machine. 
+Create_log_item() initializes log structure with values. It assigns log ID, length and PAYLOAD to the structure pointer passed as a parameter. log_item() is used to display or log items depending on the log structure initialization it passes the contents of log strctures log_data(), log_string(), log_integer().
+In order to perform logging we always need to create a log item and then call log_item(). To overcome repeated calling of two functions we have defined a macro LOGIT.
+
+
+
+
 							
 
 
