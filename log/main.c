@@ -94,19 +94,19 @@ int main(void)
     start_timer();
     start_time = START_TIMER();
     dma_memmove_32(source_array ,destination_array ,100);
-    diff=DIFFERENCE()*0.047;
+    diff=DIFFERENCE();
     LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
     start_timer();
 	start_time = START_TIMER();
 	dma_memmove_16(source_array ,destination_array ,100);
-	diff=DIFFERENCE()*0.047;
+	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
 	start_timer();
 	start_time = START_TIMER();
 	dma_memmove_8(source_array ,destination_array ,100);
-	diff=DIFFERENCE()*0.047;
+	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 #endif
 
@@ -135,19 +135,19 @@ int main(void)
 	start_timer();
 	start_time = START_TIMER();
 	dma_memzero_32(source_array, 100);
-	diff=DIFFERENCE()*0.047;
+	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
 	start_timer();
 	start_time = START_TIMER();
 	dma_memzero_16(source_array, 100);
-	diff=DIFFERENCE()*0.047;
+	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
 	start_timer();
 	start_time = START_TIMER();
 	dma_memzero_8(source_array, 100);
-	diff=DIFFERENCE()*0.047;
+	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 #endif
 
