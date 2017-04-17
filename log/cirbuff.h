@@ -55,7 +55,13 @@ typedef enum {
 *	returns:
 		Returns an enum which dictates the status of whether it is Successful or not
 *****************************************************************************************************/
-int8_t is_buffer_full(circ_buff * cb1);
+__attribute__((always_inline)) static inline int8_t is_buffer_full(circ_buff * cb1)
+{
+	if(cb1->count == cb1->size)
+		return FULL;
+	else 
+		return NO;
+}
 /*****************************************************************************************************
 *empty
 *	description:This function checks wheter the buffer is empty by checking if the 
@@ -68,7 +74,13 @@ int8_t is_buffer_full(circ_buff * cb1);
 			Returns a pointer to the starting location of the reversed
 			series of bytes
 *****************************************************************************************************/
-int8_t is_buffer_empty(circ_buff * cb1);
+__attribute__((always_inline)) static inline int8_t is_buffer_empty(circ_buff * cb1)
+{
+	if(cb1->count == 0) 
+		return EMPTY;
+	else
+		return NO;
+}
 /*****************************************************************************************************
 *initialise
 *	description:This function initialises the circular buffer by allocating the 

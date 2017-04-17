@@ -7,7 +7,7 @@ int8_t CircBuf_size(circ_buff * cb1)
     return SUCCESS;
 }
 
-//checks if buffer is full
+/*/checks if buffer is full
 int8_t is_buffer_full(circ_buff * cb1)
 {
 	if(cb1->count == cb1->size)
@@ -25,7 +25,7 @@ int8_t is_buffer_empty(circ_buff * cb1)
 	else
 		return NO;
 }
-
+*/
 //initializes elements of the structure
 int8_t initialize_buffer(circ_buff * cb1, uint32_t size)
 {
