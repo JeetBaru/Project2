@@ -178,7 +178,7 @@ int main(void)
     LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,(stop_time - start_time),10));
 	*/
 
-	LOG_IT(log1,INFO,1,"Here");
+	LOG_IT(log1,INFO,1,"-----SPI-----");
 
 
 
