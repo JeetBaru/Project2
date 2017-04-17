@@ -1,0 +1,75 @@
+
+
+
+-----------------------------------------------------------README--------------------------------------------------------------------
+
+
+############################################  		DMA.c 		 ############################################
+
+In this function we used the hardware capabilities of our FRDM board by utilizing DMA. For memory transfer functions. In this
+file we have written memmove and memzero() that utilise DMA. DMA_memove() transfers data solely through DMA and also
+takes into consideration overlap conditions for memmove(). DMA_32(), DMA_16(), DMA_8() are used to transfer data in 
+fixed byte sizes. As a part of extra credit we have offloaded the data transfer to myMmemove in order to obtain faster transmission
+speeds. Similar structure has been followed for memzero. Description of each function is provided in header file.
+
+###########################################  	        profiler.c  	#######################################
+We use this function to profile time of execution of any given function. We have a start_timer() that configures TPM1 clock
+for the purpose of counting of time passed between execution of Read_count(). This function samples TPM_CNT register as a no
+of clock ticks. The clock used for our profiler has a frequency of 21MHz. Hence, we multiply the difference between clock ticks
+between a successive read counts by 0.047 and hence obtained time in us. On overflow of the TPM count and interrupt is triggered in this case we increment an overflow flag and reset the counter zero. The description of the functions are provided in 
+header files.
+
+##########################################		RTC.c     	#########################################
+In order to implement HEARTBEAT functionality of our system we have used the real time clock module on our FRDM board. The RTC_init()
+is used to configure, the RTC clocks on our boards we have used OSC32KCLK as our reference clocks. This is 32KHz RC oscillator clockout. We have used a jumper connection to our RTC clockin pin, further we have not used any compensation for our system. As the 
+default values provided good enough accuracies. get_time() is used to sample the RTC_TSR register to obtain epoch time. The RTC seconds interrupt is triggered after every second and a HEARTBEAT log is logged inside its IRQ_handler. 
+
+##############################################   	SPI.c   	##################################################
+
+The Serial Peripheral interface (SPI) was configured is described in the .c file. The portC was enabled
+with SIMSCGC5 |= |= SIM_SCGC5_PORTC_MASK. The SCLK, MOSI, MISO, CSN were given the appropriate values.
+After sodering connected the nordic chip to FRDM KL25Z, with 6 pins (GND, VCC, MOSI, MISO, SCLK, CSN) 
+connected to the appropriate pins on FRDM.
+
+In SPI_read_byte() and SPI_write_byte(), we have sequencily written and read 1 byte data. Then with 
+SPI_send_packet() we sent the data that was been written. I have included the SPI_flush in the source file 
+and included it for writing and reading the data.
+
+In SPI_write_read_byte, we always have to include SPI_read_byte(), when we write data so in this function, we
+have clubbed the functionalities of both the functions in this function.
+
+#############################################  		nrf.c  		##################################################
+
+nrf_write_register(), in this funtion we have apporpriately sent the write command by using the macro
+NORDIC_W_REGISTER|register1 and then called the SPI_write_read_byte function to pass the value which 
+in the function parameter. This is followed by nrf_read_register(), where we read the data that was 
+written in the write function. In nrf_read_status the, status was read by passing NOP (0xFF) command to 
+the SPI_write_read_byte(). It turned out to be 0xE. Then we pass the config value in the RF_SETUP(), by 
+properly selecting the macro. The value is written by calling the NORDIC_write().
+
+The same value was read and returned in the read_RF_SETUP, by calling SPI_write_read_byte. Then value to the 
+specific channel was written by desigining a funciton write_RF_CH(), by using proper macro. Then the same value 
+was read to check the correct functionality by calling read_RF_CH(). 
+
+The multiple bytes [5] was designed to send by using write_TX_ADDR() function. An array of 5 elements is constructed
+in the main function and the pointer, pointing to the first element of this array was passed ot the function. Again by 
+giving the proper write command and the calling of SPI_write_read_byte() will write these values to the addresses. Then 
+for checking the functionality the same elements were read by using the NOP command. An array of size[10] was created in 
+main and the pointer, pointing to the first element of this array was passed in this nead_TX_ADDR() function. 
+
+The fifo status was read by using nrf_read_register(0x17), the status that we obtained by logging the data and was
+observed 0x11. Then with the help of FLUSH_TX and FLUSH_RX and calling SPI_write_read_byte the transmit and receive
+fifo is flushed.
+
+
+
+
+
+					
+
+
+
+
+
+
+
