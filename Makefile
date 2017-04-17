@@ -126,7 +126,7 @@ $(TEST_TEST_EXE) : $(TEST_TEST_SRCS) $(LIB)
 	$(CC) $(CFLAGS) -o $@ $^ $(CMOCKA_LIBRARY) 
 #this target will compile logger function for beaglebone
 log-bbb : log/main.c log/logger.c  log/cirbuff.c  log/memory.c log/analysedata.c
-	arm-linux-gnueabihf-gcc -DVERBOSE -w $^ -o log.out
+	arm-linux-gnueabihf-gcc -DVERBOSE -lrt -w $^ -o log.out
 #this target will compile logger function for host
 log-host :  log/main.c log/logger.c log/cirbuff.c  log/memory.c log/analysedata.c
 	gcc -DVERBOSE -w $^ -o log.out

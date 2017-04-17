@@ -36,7 +36,7 @@
 #include "analysedata.h"
 
 #ifdef VERBOSE
-	#include <time.h>
+	#include <sys/time.h>
 	#include <stdio.h>
 	struct timespec t1, t2;
 #else
