@@ -34,7 +34,7 @@
 #include <string.h>
 #include "memory.h"
 #include "analysedata.h"
-
+#define SIZE 100
 #ifdef VERBOSE
 	#include <sys/time.h>
 	#include <stdio.h>
@@ -93,19 +93,19 @@ int main(void)
 #ifndef VERBOSE
     start_timer();
     start_time = START_TIMER();
-    dma_memmove_32(source_array ,destination_array ,100);
+    dma_memmove_32(source_array ,destination_array ,SIZE);
     diff=DIFFERENCE();
     LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
     start_timer();
 	start_time = START_TIMER();
-	dma_memmove_16(source_array ,destination_array ,100);
+	dma_memmove_16(source_array ,destination_array ,SIZE);
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
 	start_timer();
 	start_time = START_TIMER();
-	dma_memmove_8(source_array ,destination_array ,100);
+	dma_memmove_8(source_array ,destination_array ,SIZE);
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 #endif
@@ -114,7 +114,7 @@ int main(void)
 	start_timer();
 #endif
 	start_time = START_TIMER();
-	my_memmov(source_array ,destination_array ,100);
+	my_memmov(source_array ,destination_array ,SIZE);
 	stop_time = STOP_TIMER();
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
@@ -124,7 +124,7 @@ int main(void)
 	start_timer();
 #endif
 	start_time = START_TIMER();
-	memmove(destination_array ,source_array ,100);
+	memmove(destination_array ,source_array ,SIZE);
 	stop_time = STOP_TIMER();
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
@@ -134,19 +134,19 @@ int main(void)
 #ifndef VERBOSE
 	start_timer();
 	start_time = START_TIMER();
-	dma_memzero_32(source_array, 100);
+	dma_memzero_32(source_array, SIZE);
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
 	start_timer();
 	start_time = START_TIMER();
-	dma_memzero_16(source_array, 100);
+	dma_memzero_16(source_array, SIZE);
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 
 	start_timer();
 	start_time = START_TIMER();
-	dma_memzero_8(source_array, 100);
+	dma_memzero_8(source_array, SIZE);
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
 #endif
@@ -155,7 +155,7 @@ int main(void)
 	start_timer();
 #endif
 	start_time = START_TIMER();
-	my_memzero(source_array, 100);
+	my_memzero(source_array, SIZE);
 	stop_time = STOP_TIMER();
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
@@ -164,7 +164,7 @@ int main(void)
 	start_timer();
 #endif
 	start_time = START_TIMER();
-	memset(source_array, 0, 100);
+	memset(source_array, 0, SIZE);
 	stop_time = STOP_TIMER();
 	diff=DIFFERENCE();
 	LOG_IT(log1,CLOCK_CYCLES,1,my_itoa(p,diff,10));
