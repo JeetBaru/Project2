@@ -5,11 +5,8 @@
  *      Author: Jeet
  */
 
-#include "MKL25Z4.h"
 #include <stdint.h>
 #include "profiler.h"
-
-uint16_t overflow;
 
 void start_timer()
 {
@@ -19,6 +16,8 @@ void start_timer()
 
 	TPM1_SC = 0;							// Disable Timer
 	TPM1_MOD = 0xFFFF;
+
+	overflow = 0;
 
 	//TPM1_SC |= 0x4;					// Prescaler divide by 16
 	//TPM1_SC &= ~0x3;
@@ -31,15 +30,16 @@ void start_timer()
 
 	TPM1_SC |= 0x8;					// Selecting clock mode
 
-	__enable_irq();					// Enable global Interrupt
+	//__enable_irq();					// Enable global Interrupt
 
 }
 
 void TPM1_IRQHandler()
 {
+	__disable_irq();
 	overflow++;
 	TPM1_SC |= 0x80;				// Clear TOF flag by writing 1 to it
-	GPIOB_PDOR = ~GPIOB_PDOR;		//Toggle LEDs
+	__enable_irq();
 }
 
 uint16_t read_count()

@@ -1,31 +1,3 @@
-
-/**************************************************************************************
-*   File: cirbuff.h
-*
-*   Copyrights 2016  Sudeep Kulkarniirlekar and Jeet Baru
-*   All Rights Reserved
-*
-*
-*   The information contained herein is property of the Authors. 
-*   The copying and distribution of the files is prohibited except
-*   by express written agreement with the Authors.
-*
-*
-*   Authors: Sudeep Kulkarniirlekar and Jeet Baru
-*   Date Edited: 12 March 2017
-*
-*   Description: Source file for implementing Circular buffer functions
-*              - CircBuf_size 
-*              - is_buffer_full
-*	       - is_buffer_empty
-*              - initialize_buffer
-*              - destroy_buffer
-*              - add_item
-*              - remove_item
-*	       - cirbuf_peak
-*
-****************************************************************************************/
-
 # include "cirbuff.h"
 
 //allocates size to the buffer
@@ -38,24 +10,14 @@ int8_t CircBuf_size(circ_buff * cb1)
 //checks if buffer is full
 int8_t is_buffer_full(circ_buff * cb1)
 {
-	if (!cb1)												//null pointer check
-		return INVALID_POINTER;
-	if(cb1->count == cb1->size)								//if number of elements in buffer = size, buffer full
-		return FULL;
-	else
-		return NO;
+	return (cb1->count == cb1->size)? FULL : NO;
 }
 
 
 //checks if buffer empty
 int8_t is_buffer_empty(circ_buff * cb1)
 {
-	if (!cb1)
-		return INVALID_POINTER;								//null pointer check
-	if(cb1->count == 0)										//if number of elements = 0, buffer empty
-		return EMPTY;
-	else
-		return NO;
+	return (cb1->count == 0)? EMPTY : NO;
 }
 
 //initializes elements of the structure

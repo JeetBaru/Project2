@@ -1,31 +1,4 @@
 
-/**************************************************************************************
-*   File: cirbuff.h
-*
-*   Copyrights 2016  Sudeep Kulkarniirlekar and Jeet Baru
-*   All Rights Reserved
-*
-*
-*   The information contained herein is property of the Authors. 
-*   The copying and distribution of the files is prohibited except
-*   by express written agreement with the Authors.
-*
-*
-*   Authors: Sudeep Kulkarniirlekar and Jeet Baru
-*   Date Edited: 12 March 2017
-*
-*   Description: Source file for implementing Circular buffer functions
-*              - CircBuf_size 
-*              - is_buffer_full
-*	       - is_buffer_empty
-*              - initialize_buffer
-*              - destroy_buffer
-*              - add_item
-*              - remove_item
-*	       - cirbuf_peak
-*
-****************************************************************************************/
-
 //logger.c
 
 # include "logger.h"
@@ -91,6 +64,7 @@ void log_integer(int32_t data)
 void create_log_item(log * logptr, status log_id, int32_t length, int8_t * ptr)
 {
 	logptr->logid = log_id;
+	logptr->timestamp = TIMESTAMP();
 	logptr->length = length;
 	logptr->payload = ptr;									//initialize payload with start pointer
 }
@@ -100,6 +74,8 @@ void log_item(log * logptr)
 {
 	LOG_RAW_STRING("LOG ID ");								//prints log id
 	LOG_RAW_INTEGER(logptr->logid);							//prints log id value
+	LOG_RAW_STRING(" / TIMESTAMP ");
+	LOG_RAW_INTEGER(logptr->timestamp);
 	if(logptr->payload != 0)								//if payload is not zero
 	{
 		LOG_RAW_STRING(" / PAYLOAD ");
