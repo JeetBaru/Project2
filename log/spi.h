@@ -87,13 +87,13 @@ uint8_t SPI_write_read_byte(uint8_t byte);
 uint8_t SPI_status(void);
 
 /*****************************************************************************************************
-*SPI_flus
+*SPI_flush
 *	description:The function to flush the SPI
 *	parameters:
 		This function has no parameters
 *   return : This function does not return anything
 *****************************************************************************************************/
-void SPI_flush(void);
+static void SPI_flush() __attribute__((always_inline));
 
 
 #endif /* INCLUDES_SPI_H_ */

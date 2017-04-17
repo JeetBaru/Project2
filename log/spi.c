@@ -45,7 +45,9 @@ uint8_t SPI_status() {
 
 
 //function to re-initialize the spi module
-void SPI_flush()
+
+
+static inline void SPI_flush()
 {
 	//disable the SPI module by making SPE=0
 	SPI0_C1 &= 0xBF;
