@@ -116,7 +116,7 @@ void send_n_bytes()
 
 void UART0_IRQHandler()
 {
-	__disable_irq();				//first disable any interrupts
+	START_CRITICAL();				//first disable any interrupts
 	if(UART0_C2 & 0x80)				//if transmit interrupt
 	{
 		send_n_bytes();				//send byte

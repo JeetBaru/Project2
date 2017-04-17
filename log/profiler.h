@@ -19,6 +19,9 @@
 	#define DIFFERENCE() (stop_time + (overflow * (65536)) - start_time)*0.047
 #endif
 
+#define START_CRITICAL() __disable_irq()
+#define STOP_CRITICAL() __enable_irq()
+
 uint32_t start_time;
 uint32_t stop_time;
 uint32_t diff;

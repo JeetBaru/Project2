@@ -10,14 +10,20 @@ int8_t CircBuf_size(circ_buff * cb1)
 //checks if buffer is full
 int8_t is_buffer_full(circ_buff * cb1)
 {
-	return (cb1->count == cb1->size)? FULL : NO;
+	if(cb1->count == cb1->size)
+		return FULL;
+	else 
+		return NO;
 }
 
 
 //checks if buffer empty
 int8_t is_buffer_empty(circ_buff * cb1)
 {
-	return (cb1->count == 0)? EMPTY : NO;
+	if(cb1->count == 0) 
+		return EMPTY;
+	else
+		return NO;
 }
 
 //initializes elements of the structure

@@ -46,6 +46,9 @@
 #define DATA_RECIEVED 0x20
 #define DATA_TRANSMIT_READY 0x80
 #define DATA_TRANSMITTED 0x40
+
+#define START_CRITICAL() __disable_irq()
+#define STOP_CRITICAL() __enable_irq()
 /*****************************************************************************************************
 *uartinit
 *	description:This function initializes UART registers to required values

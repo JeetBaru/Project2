@@ -75,10 +75,10 @@ uint16_t read_count()
 
 void TPM1_IRQHandler()
 {
-	__disable_irq();
+	START_CRITICAL();
 	overflow++;
 	TPM1_SC |= 0x80;				// Clear TOF flag by writing 1 to it
-	__enable_irq();
+	STOP_CRITICAL();
 }
 
 uint16_t read_count()

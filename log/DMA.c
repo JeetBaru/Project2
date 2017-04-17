@@ -15,10 +15,10 @@ dma_status dma_memmove(int8_t * source, int8_t * dest, int16_t length)
 {
 	if(!source || !dest)
 	{
-		return DMA_NULL_POINTER;
+		return DMA_NULL_POINTER;										//check for null pointer
 	}
 	if (dest < source)
-		dma_move(source,dest,length);
+		dma_move(source,dest,length);									//conditions for correct transmission overlap 
 	else
 	{
 		if(dest >= (source+length))
@@ -38,7 +38,7 @@ dma_status dma_memzero_32(int8_t * d, int16_t l)
 {
 	if(!d)
 	{
-		return DMA_NULL_POINTER;
+		return DMA_NULL_POINTER;										//check for null pointer
 	}
 
 	if(l==0)
@@ -46,43 +46,43 @@ dma_status dma_memzero_32(int8_t * d, int16_t l)
 		return DMA_NULL_LENGTH;
 	}
 
-	SIM_SCGC6 |= SIM_SCGC6_DMAMUX_MASK;
-	SIM_SCGC7 |= SIM_SCGC7_DMA_MASK;
+	SIM_SCGC6 |= SIM_SCGC6_DMAMUX_MASK;									//Enable clock to DMA MUX
+	SIM_SCGC7 |= SIM_SCGC7_DMA_MASK;									//Enable clock to DMA
 
 
-	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
-	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
+	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;								//Clear the done bit
+	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;										//Clear Interrupt flag
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
-	DMA_DCR0 = 0;
+	DMA_DCR0 = 0;														//clear controll register
 
-	int32_t s [1]= {0};
+	int32_t s [1]= {0};													//initialize zero as source
 
 	DMA_SAR0 = (uint32_t)&s;
 
-	DMA_DSR_BCR0 |= l;
+	DMA_DSR_BCR0 |= l;													//byte count register = l
 
 	DMA_DCR0 |= ( DMA_DCR_EINT_MASK
-				| DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+				| DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
-	DMA_DCR0 &= ~(0x11<<20);
-	DMA_DCR0 &= ~(0x11<<17);
+	DMA_DCR0 &= ~(0x11<<20);											//Set number of bytes to 32
+	DMA_DCR0 &= ~(0x11<<17);											
 
 	DMA_DAR0 = (uint32_t)d;
 
-	DMAMUX0_CHCFG0 |= DMAMUX_CHCFG_ENBL_MASK | DMAMUX_CHCFG_SOURCE(60);
+	DMAMUX0_CHCFG0 |= DMAMUX_CHCFG_ENBL_MASK | DMAMUX_CHCFG_SOURCE(60); //Enable DMA channel
 
-	NVIC_EnableIRQ(DMA0_IRQn);
+	NVIC_EnableIRQ(DMA0_IRQn);											//enable irq
 	__enable_irq();
 
-	DMA_DCR0 |= DMA_DCR_START_MASK;
+	DMA_DCR0 |= DMA_DCR_START_MASK;										//start DMA transfer
 
 	if(l%4 != 0)
-		my_memzero(d+l-l%4,l%4);
+		my_memzero(d+l-l%4,l%4);										//complete remaining bytes using my_memzero
 
 	return DMA_SUCCESS;
 }
@@ -91,7 +91,7 @@ dma_status dma_memzero_16(int8_t * d, int16_t l)
 {
 	if(!d)
 	{
-		return DMA_NULL_POINTER;
+		return DMA_NULL_POINTER;										//check for null pointer
 	}
 
 	if(l==0)
@@ -105,7 +105,7 @@ dma_status dma_memzero_16(int8_t * d, int16_t l)
 	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
 	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -116,11 +116,11 @@ dma_status dma_memzero_16(int8_t * d, int16_t l)
 	DMA_DSR_BCR0 |= l;
 
 	DMA_DCR0 |= ( DMA_DCR_EINT_MASK
-				| DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_SSIZE(2)			//Source size is 8-bit
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_DSIZE(2)			//Destination size is 8-bit
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+				| DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests
+				| DMA_DCR_SSIZE(2)										//Source size is 8-bit
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_DSIZE(2)										//Destination size is 8-bit
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
 	DMA_DAR0 = (uint32_t)d;
@@ -142,7 +142,7 @@ dma_status dma_memzero_8(int8_t * d, int16_t l)
 {
 	if(!d)
 	{
-		return DMA_NULL_POINTER;
+		return DMA_NULL_POINTER;										//check for null pointer
 	}
 
 	if(l==0)
@@ -157,7 +157,7 @@ dma_status dma_memzero_8(int8_t * d, int16_t l)
 	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
 	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -168,11 +168,11 @@ dma_status dma_memzero_8(int8_t * d, int16_t l)
 	DMA_DSR_BCR0 |= l;
 
 	DMA_DCR0 |= ( DMA_DCR_EINT_MASK
-				| DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_SSIZE(1)			//Source size is 8-bit
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_DSIZE(1)			//Destination size is 8-bit
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+				| DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests
+				| DMA_DCR_SSIZE(1)										//Source size is 8-bit
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_DSIZE(1)										//Destination size is 8-bit
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
 	DMA_DAR0 = (uint32_t)d;
@@ -191,7 +191,7 @@ dma_status dma_memmove_32(int8_t * s, int8_t * d, int16_t l)
 {
 	if(!d || !s)
 	{
-		return DMA_NULL_POINTER;
+		return DMA_NULL_POINTER;										//check for null pointer
 	}
 
 	if(l==0)
@@ -211,7 +211,7 @@ dma_status dma_memmove_32(int8_t * s, int8_t * d, int16_t l)
 	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
 	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -220,10 +220,10 @@ dma_status dma_memmove_32(int8_t * s, int8_t * d, int16_t l)
 	DMA_DSR_BCR0 |= l;
 
 	DMA_DCR0 |= ( DMA_DCR_EINT_MASK
-				| DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_SINC_MASK			//Increment source address after a successful transfer
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+				| DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests
+				| DMA_DCR_SINC_MASK										//Increment source address after a successful transfer
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
 	DMA_DCR0 &= ~(0x11<<20);
@@ -246,6 +246,21 @@ dma_status dma_memmove_32(int8_t * s, int8_t * d, int16_t l)
 
 dma_status dma_memmove_16(int8_t * s, int8_t * d, int16_t l)
 {
+	if(!d || !s)
+	{
+		return DMA_NULL_POINTER;										//check for null pointer
+	}
+
+	if(l==0)
+	{
+		return DMA_NULL_LENGTH;
+	}
+
+	if(d == s)
+	{
+		return DMA_SUCCESS;
+	}
+	
 	SIM_SCGC6 |= SIM_SCGC6_DMAMUX_MASK;
 	SIM_SCGC7 |= SIM_SCGC7_DMA_MASK;
 
@@ -253,7 +268,7 @@ dma_status dma_memmove_16(int8_t * s, int8_t * d, int16_t l)
 	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
 	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -262,12 +277,12 @@ dma_status dma_memmove_16(int8_t * s, int8_t * d, int16_t l)
 	DMA_DSR_BCR0 |= l;
 
 	DMA_DCR0 |= ( DMA_DCR_EINT_MASK
-				| DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_SSIZE(2)			//Source size is 8-bit
-				| DMA_DCR_SINC_MASK			//Increment source address after a succesful transfer
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_DSIZE(2)			//Destination size is 8-bit
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+				| DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests
+				| DMA_DCR_SSIZE(2)										//Source size is 8-bit
+				| DMA_DCR_SINC_MASK										//Increment source address after a succesful transfer
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_DSIZE(2)										//Destination size is 8-bit
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
 	DMA_DAR0 = (uint32_t)d;
@@ -289,12 +304,12 @@ dma_status dma_memmove_8(int8_t * s, int8_t * d, int16_t l)
 {
 	if(!d || !s)
 	{
-		return DMA_NULL_POINTER;
+		return DMA_NULL_POINTER;										//Check for null pointer
 	}
 
 	if(l==0)
 	{
-		return DMA_NULL_LENGTH;
+		return DMA_NULL_LENGTH;											//check for null length
 	}
 
 	if(d == s)
@@ -302,14 +317,14 @@ dma_status dma_memmove_8(int8_t * s, int8_t * d, int16_t l)
 		return DMA_SUCCESS;
 	}
 
-	SIM_SCGC6 |= SIM_SCGC6_DMAMUX_MASK;
-	SIM_SCGC7 |= SIM_SCGC7_DMA_MASK;
+	SIM_SCGC6 |= SIM_SCGC6_DMAMUX_MASK;									//clock to DMA MUX
+	SIM_SCGC7 |= SIM_SCGC7_DMA_MASK;									//clock to DMA
 
 
-	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
-	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
+	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;								//clear the done bit
+	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;										//interrupt disanable
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -318,12 +333,12 @@ dma_status dma_memmove_8(int8_t * s, int8_t * d, int16_t l)
 	DMA_DSR_BCR0 |= l;
 
 	DMA_DCR0 |= ( DMA_DCR_EINT_MASK
-				| DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_SSIZE(1)			//Source size is 8-bit
-				| DMA_DCR_SINC_MASK			//Increment source address after a succesful transfer
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_DSIZE(1)			//Destination size is 8-bit
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+				| DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests		
+				| DMA_DCR_SSIZE(1)										//Source size is 8-bit
+				| DMA_DCR_SINC_MASK										//Increment source address after a succesful transfer
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_DSIZE(1)										//Destination size is 8-bit
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
 	DMA_DAR0 = (uint32_t)d;
@@ -343,7 +358,7 @@ void dma_move(int8_t * s, int8_t * d, int16_t l)
 	if(!d || !s)
 	{
 		return DMA_NULL_POINTER;
-	}
+	}	
 
 	if(l==0)
 	{
@@ -366,7 +381,7 @@ void dma_move(int8_t * s, int8_t * d, int16_t l)
 	DMA_DSR_BCR0 &= ~DMA_DSR_BCR_DONE_MASK;
 	DMA_DCR0 &= ~DMA_DCR_EINT_MASK;
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -374,10 +389,10 @@ void dma_move(int8_t * s, int8_t * d, int16_t l)
 
 	DMA_DSR_BCR0 |= l - l1;
 
-	DMA_DCR0 |= ( DMA_DCR_EADREQ_MASK		//Enable Async. DMA Requests
-				| DMA_DCR_SINC_MASK			//Increment source address after a successful transfer
-				| DMA_DCR_DINC_MASK			//Destination address increments
-				| DMA_DCR_D_REQ_MASK		//DMA request is cleared
+	DMA_DCR0 |= ( DMA_DCR_EADREQ_MASK									//Enable Async. DMA Requests
+				| DMA_DCR_SINC_MASK										//Increment source address after a successful transfer
+				| DMA_DCR_DINC_MASK										//Destination address increments
+				| DMA_DCR_D_REQ_MASK									//DMA request is cleared
 				);
 
 	DMA_DCR0 &= ~(0x11<<20);
@@ -391,7 +406,7 @@ void dma_move(int8_t * s, int8_t * d, int16_t l)
 
 	DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK;
 
-	DMAMUX0_CHCFG0 = 0x00;					//disable DMA
+	DMAMUX0_CHCFG0 = 0x00;												//disable DMA
 
 	DMA_DCR0 = 0;
 
@@ -542,7 +557,8 @@ dma_status dma_memzero( int8_t * d, int16_t l)
 
 void DMA0_IRQHandler(void)
 {
-	stop_time = STOP_TIMER();
-	__disable_irq();
+	stop_time = STOP_TIMER();											//stop timer on completion
+	START_CRITICAL();
 	DMA_DSR_BCR0 |= DMA_DSR_BCR_DONE_MASK;
+	STOP_CRITICAL();
 }
