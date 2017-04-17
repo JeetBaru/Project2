@@ -22,11 +22,9 @@ void rtc_init(void)
     if (RTC_SR & RTC_SR_TIF_MASK){          //Check if time invalid
 		RTC_TSR = 0x00000000;               //Clears the Time invalid flag
 	}
-    //RTC_TCR = RTC_TCR_CIR(1) | RTC_TCR_TCR(0xCF);   //Setup compensation parameters
-    //RTC_CR |= RTC_CR_OSCE_MASK;                     //Enable 32.768Hz oscillator
+    
     RTC_TSR = 0x58F2EFB2;                           //Reset the seconds register
 
-    //RTC_IER = 0x00;
     RTC_IER |=0x10;
 
     RTC_SR |= RTC_SR_TCE_MASK;                      //Enable RTC
