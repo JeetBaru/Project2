@@ -20,7 +20,6 @@ void SPI_init(void){
 
 		//configuring the ss pin
 
-
 	//configuring the ss pin
 	PTC->PDDR |= 0x10;                      //selecting the ss pin as output (---1 ----)
 	PTC->PSOR = 0x10;						//making the ss pin high (or idle, since its active low)
@@ -68,11 +67,13 @@ uint8_t SPI_write_read_byte(uint8_t byte){
 
 	return temp;
 }
+//function to write a byte
 void SPI_write_byte(uint8_t byte)
 {
-while(!(SPI_status() & 0x20));
+	while(!(SPI_status() & 0x20));
 	SPI0->D = byte; //writing the character to data register
 }
+//function to read a byte
 uint8_t SPI_read_byte(uint8_t byte)
 {
 	uint8_t temp;
@@ -80,6 +81,7 @@ uint8_t SPI_read_byte(uint8_t byte)
 		temp = SPI0_D;   //clears SPRF
 	return temp;
 }
+//function to send the packet
 void SPI_send_packet(uint8_t* p, uint8_t length)
 {
 	uint8_t i=0;

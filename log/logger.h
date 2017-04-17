@@ -37,13 +37,61 @@ typedef enum log_status_t{
 	ERROR, DAT_RECIEVED, DATA_ANALYSIS_STARTED, DATA_ALPHA_COUNT, DATA_NUMERIC_COUNT, DATA_PUNCTUATION_COUNT,
 	DATA_MISC_COUNT, DATA_ANALYSIS_COMPLETED, CLOCK_CYCLES, HEARTBEAT
 }status;
-
+/*****************************************************************************************************
+*log_data
+*	description:This function adds the data to the transmit buffer and either calls
+				interrupt or prints depending on device
+*	parameters:
+		uint8_t * ptr - pointer to the starting adress of the data to be logged
+		uint32_t length - length of data
+*****************************************************************************************************/
 void log_data(uint8_t * ptr,uint32_t length);
+
+/*****************************************************************************************************
+*log_string
+*	description:This function calculates length of string and calls log_data
+*	parameters:
+		uint8_t * ptr - pointer to the starting adress of the data to be logged
+*****************************************************************************************************/
 void log_string(int8_t * ptr);
+
+/*****************************************************************************************************
+*log_int
+*	description:This function converts integer data to ascii string and call log_string
+*	parameters:
+		int32_t data - data to be converted and hence logged
+*****************************************************************************************************/
 void log_integer(int32_t data);
+/*****************************************************************************************************
+*create log item
+*	description:this function intializes the log structure with values for next log
+*	parameters:
+		log * logptr - pointer to log struct
+		status log_id - log id og next log item
+		int32_t length - length of data of next log item
+		int8_t * ptr - pointer to data of next log item
+*****************************************************************************************************/
 void create_log_item(log * logptr, status log_id, int32_t length, int8_t * ptr);
+/*****************************************************************************************************
+*destroy log item
+*	description:this function destroys memory allocated in heap
+*	parameters:
+		log * log1 - pointer to log struct to be destroyed
+*****************************************************************************************************/
 void destroy_log_item(log * log1);
+/*****************************************************************************************************
+*log item
+*	description:this function calls various functions to log desired data
+*	parameters:
+		log * logptr - pointer to log struct to be displayed
+*****************************************************************************************************/
 void log_item(log * logptr);
+/*****************************************************************************************************
+*log flush
+*	description:this function flushes the contents of given buffer via circptr
+*	parameters:
+		circ_buff *circ_pre - pointer to log struct to be flused
+*****************************************************************************************************/
 void log_flush(circ_buff * circ_pre);
 
 

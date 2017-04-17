@@ -35,23 +35,8 @@
 #define NORDIC_RF_SETUP		(0x06)
 #define NORDIC_STATUS		(0x07)
 #define NORDIC_OBSERVE_TX	(0x08)
-#define NORDIC_CD			(0x09)
-#define NORDIC_RX_ADDR_P0	(0x0A)
-#define NORDIC_RX_ADDR_P1	(0x0B)
-#define NORDIC_RX_ADDR_P2	(0x0C)
-#define NORDIC_RX_ADDR_P3	(0x0D)
-#define NORDIC_RX_ADDR_P4	(0x0E)
-#define NORDIC_RX_ADDR_P5	(0x0F)
 #define NORDIC_TX_ADDR		(0x10)
-#define NORDIC_RX_PW_P0		(0x11)
-#define NORDIC_RX_PW_P1		(0x12)
-#define NORDIC_RX_PW_P2		(0x13)
-#define NORDIC_RX_PW_P3		(0x14)
-#define NORDIC_RX_PW_P4		(0x15)
-#define NORDIC_RX_PW_P5		(0x16)
 #define NORDIC_FIFO_STATUS  (0x17)
-#define NORDIC_DYNPD		(0x1C)
-#define NORDIC_FEATURE		(0x1D)
 #define FLUSH_TX 			(0XE1)
 #define FLUSH_RX			(0XE2)
 
@@ -68,149 +53,142 @@
 #define NORDIC_CONFIG_PRIM_TX     	 (0x00)  						// 0: PTX
 
 
-// EN_AA Register Bits
-#define NORDIC_ENAA_ALL        (0x3F)							//Enable auto-acknowledgment for all pipes
-#define NORDIC_ENAA_P5(x)      (uint8_t)((uint8_t)(x)<<5)		//Enable auto-acknowledgment for pipe 5
-#define NORDIC_ENAA_P4(x)      (uint8_t)((uint8_t)(x)<<4)		//Enable auto-acknowledgment for pipe 4
-#define NORDIC_ENAA_P3(x)      (uint8_t)((uint8_t)(x)<<3)		//Enable auto-acknowledgment for pipe 3
-#define NORDIC_ENAA_P2(x)      (uint8_t)((uint8_t)(x)<<2)		//Enable auto-acknowledgment for pipe 2
-#define NORDIC_ENAA_P1(x)      (uint8_t)((uint8_t)(x)<<1)		//Enable auto-acknowledgment for pipe 1
-#define NORDIC_ENAA_P0(x)      (uint8_t)((uint8_t)(x)<<0)		//Enable auto-acknowledgment for pipe 0
-#define NORDIC_ENAA_NONE       (0x00)							//Enable auto-acknowledgment none of the pipes
-
-
-// EN_RXADDR Register Bits
-#define NORDIC_ERX_P5(x)		(uint8_t)((uint8_t)(x)<<5)		//Enable data pipe 5
-#define NORDIC_ERX_P4(x)		(uint8_t)((uint8_t)(x)<<4)		//Enable data pipe 4
-#define NORDIC_ERX_P3(x)		(uint8_t)((uint8_t)(x)<<3)		//Enable data pipe 3
-#define NORDIC_ERX_P2(x)		(uint8_t)((uint8_t)(x)<<2)		//Enable data pipe 2
-#define NORDIC_ERX_P1(x)		(uint8_t)((uint8_t)(x)<<1 )		//Enable data pipe 1
-#define NORDIC_ERX_P0(x)		(uint8_t)((uint8_t)(x)<<0)		//Enable data pipe 0
-
-
-// Setup of address widths SETUP_AW Register Bits
-#define NORDIC_AW_ILLEGAL	(0x00)		//Illegal rx/tx address field width
-#define NORDIC_AW_THREE		(0x01)		//rx/tx address field width of 3 bytes
-#define NORDIC_AW_FOUR		(0x02)		//rx/tx address field width of 4 bytes
-#define NORDIC_AW_FIVE		(0x03)		//rx/tx address field width of 5 bytes
-
-
-// Setup of automatic retransmission
-//setting the auto retransmit delays
-#define NORDIC_ARD_250		(0x00)		//Wait for 250 us - auto retransmit delay
-#define NORDIC_ARD_500		(0x10)		//Wait for 500 us
-#define NORDIC_ARD_750		(0x20)		//Wait for 750 us
-#define NORDIC_ARD_1000		(0x30)		//Wait for 1000 us
-#define NORDIC_ARD_1250		(0x40)		//Wait for 1250 us
-#define NORDIC_ARD_1500		(0x50)		//Wait for 1500 us
-#define NORDIC_ARD_1750		(0x60)		//Wait for 1750 us
-#define NORDIC_ARD_2000		(0x70)		//Wait for 2000 us
-#define NORDIC_ARD_2250		(0x80)		//Wait for 2250 us
-#define NORDIC_ARD_2500		(0x90)		//Wait for 2500 us
-#define NORDIC_ARD_2750		(0xA0)		//Wait for 2750 us
-#define NORDIC_ARD_3000		(0xB0)		//Wait for 3000 us
-#define NORDIC_ARD_3250		(0xC0)		//Wait for 3250 us
-#define NORDIC_ARD_3500		(0xD0)		//Wait for 3500 us
-#define NORDIC_ARD_3750		(0xE0)		//Wait for 3750 us
-#define NORDIC_ARD_4000		(0xF0)		//Wait for 4000 us
-
-//setting the auto-retransmit counts
-#define NORDIC_ARC_0		(0x00)		//disable auto retransmit
-#define NORDIC_ARC_1		(0x01)		//upto 1 retransmit on fail of AA
-#define NORDIC_ARC_2		(0x02)		//upto 2 retransmit on fail of AA
-#define NORDIC_ARC_3		(0x03)		//upto 3 retransmit on fail of AA
-#define NORDIC_ARC_4		(0x04)		//upto 4 retransmit on fail of AA
-#define NORDIC_ARC_5		(0x05)		//upto 5 retransmit on fail of AA
-#define NORDIC_ARC_6		(0x06)		//upto 6 retransmit on fail of AA
-#define NORDIC_ARC_7		(0x07)		//upto 7 retransmit on fail of AA
-#define NORDIC_ARC_8		(0x08)		//upto 8 retransmit on fail of AA
-#define NORDIC_ARC_9		(0x09)		//upto 9 retransmit on fail of AA
-#define NORDIC_ARC_10		(0x0A)		//upto 10 retransmit on fail of AA
-#define NORDIC_ARC_11		(0x0B)		//upto 11 retransmit on fail of AA
-#define NORDIC_ARC_12		(0x0C)		//upto 12 retransmit on fail of AA
-#define NORDIC_ARC_13		(0x0D)		//upto 13 retransmit on fail of AA
-#define NORDIC_ARC_14		(0x0E)		//upto 14 retransmit on fail of AA
-#define NORDIC_ARC_15		(0x0F)		//upto 15 retransmit on fail of AA
-
-
-// RF Setup Register Bits
-#define NORDIC_PLL_LOCK(x)					(uint8_t)((uint8_t)(x)<<4) 	//Force PLL lock signal
-#define NORDIC_RF_DR_ONE					(0x00)						//Air data rate of 1Mbps
-#define NORDIC_RF_DR_TWO					(0x08)						//Air data rate of 2Mbps
-#define NORDIC_RF_PWR_NEGATIVE_EIGHTEEN		(0x00)						//RF output power in TX mode of -18dBm
-#define NORDIC_RF_PWR_NEGATIVE_TWELVE		(0x02)						//RF output power in TX mode of -12dBm
-#define NORDIC_RF_PWR_NEGATIVE_SIX			(0x04)						//RF output power in TX mode of -6dBm
-#define NORDIC_RF_PWR_ZERO					(0x06)						//RF output power in TX mode of 0dBm
-#define NORDIC_LNA_HCURR(x)					(uint8_t)((uint8_t)(x)<<0)	//Setup LNA gain
-
-
-// STATUS Register Bits
-#define NORDIC_STATUS_RX_DR(x)    	 (uint8_t)((uint8_t)(x)<<6)  	// Data ready RX FIFO interrupt
-#define NORDIC_STATUS_TX_DS(x)       (uint8_t)((uint8_t)(x)<<5)  	// Data sent TX FIFO interrupt
-#define NORDIC_STATUS_MAX_RT(x)      (uint8_t)((uint8_t)(x)<<4)  	// max number of tx retransmissions
-#define NORDIC_STATUS_RX_P_NO_0   	 (0x00)  						// pipe 0 for payload available for reading from RX_FIFO
-#define NORDIC_STATUS_RX_P_NO_1   	 (0x02)							// pipe 1 for payload available for reading from RX_FIFO
-#define NORDIC_STATUS_RX_P_NO_2   	 (0x04)  						// pipe 2 for payload available for reading from RX_FIFO
-#define NORDIC_STATUS_RX_P_NO_3   	 (0x06)  						// pipe 3 for payload available for reading from RX_FIFO
-#define NORDIC_STATUS_RX_P_NO_4   	 (0x08)  						// pipe 4 for payload available for reading from RX_FIFO
-#define NORDIC_STATUS_RX_P_NO_5   	 (0x0A)  						// pipe 5 for payload available for reading from RX_FIFO
-
-
-// CARRIER DETECT
-#define NORDIC_CD_CD(x)			(uint8_t)(x)	//LSB of carrier detect register
-
-
-// DYNPD register
-#define NORDIC_DPL_P5(x)		(uint8_t)((uint8_t)(x)<<5)		//Enable dyn. payload length data pipe 5
-#define NORDIC_DPL_P4(x)		(uint8_t)((uint8_t)(x)<<4)		//Enable dyn. payload length data pipe 4
-#define NORDIC_DPL_P3(x)		(uint8_t)((uint8_t)(x)<<3)		//Enable dyn. payload length data pipe 3
-#define NORDIC_DPL_P2(x)		(uint8_t)((uint8_t)(x)<<2)		//Enable dyn. payload length data pipe 2
-#define NORDIC_DPL_P1(x)		(uint8_t)((uint8_t)(x)<<1)		//Enable dyn. payload length data pipe 1
-#define NORDIC_DPL_P0(x)		(uint8_t)((uint8_t)(x)<<0)		//Enable dyn. payload length data pipe 0
-
-
-// FEATURE REGISTER
-#define NORDIC_EN_DPL(x)		(uint8_t)((uint8_t)(x)<<2)		//Enable dynamic payload length
-#define NORDIC_EN_ACK_PAY(x)	(uint8_t)((uint8_t)(x)<<1)		//Enables payload with ACK
-#define NORDIC_EN_DYN_ACK(x)	(uint8_t)((uint8_t)(x)<<0)		//Enables the W_TX_PAYLOAD_NOACK command
-
-
 // Function prototypes
+/*****************************************************************************************************
+*nrf_write_register
+*	description:This function writes a byte to the register, in this function we call the SPI_write and SPI_read
+*	parameters:
+		register1 = The register to which the value we want to write
+		value    =  The value to be written
+*   return : This function does not return anything
+*****************************************************************************************************/
 void nrf_write_register(uint8_t register1, uint8_t value);
+/*****************************************************************************************************
+*nrf_read_register
+*	description:This function will read the value that has been written this again involves
+				the calling of SPI_write and SPI_read
+*	parameters:
+				register1 = The register to which the value has been previously written
+*	returns:
+			The return of this function is value that has been written
+*****************************************************************************************************/
 uint8_t nrf_read_register(uint8_t register1);
+/*****************************************************************************************************
+*read_status
+*	description:This function reads the status after the read write combination
+				in which we call SPI_write_read_byte function
+*	parameters:
+				This function has no parameters
+*	returns:
+				Returns an enum saying the buffer has been initialised, also it
+				sets the size of the circular buffer
+*****************************************************************************************************/
 uint8_t nrf_read_status();
+/*****************************************************************************************************
+*nrf_write_config
+*	description:The register to which we will write now is 0x00 NORDIC_CONFIG
+*	parameters:
+		config = The value we need to write to the register
+*	returns:
+			This function does not return anything
+*****************************************************************************************************/
 void nrf_write_config(uint8_t config);
+/*****************************************************************************************************
+*nrf_read_config
+*	description: This function reads the value that has been written to the NORDIC_CONFIG register
+*	parameters:
+		This function has no parameters
+*	returns:
+		Returns the value that has been written to the register
+*****************************************************************************************************/
 uint8_t nrf_read_config();
+/*****************************************************************************************************
+*nrf_write_rf_setup
+*	description:The value config that has to be written to NORDIC_RF_SETUP (0X06)
+*	parameters:
+		config = The value that we need to write to the NORDIC_RF_SETUP
+*	returns:
+			This function does not return anything
+*****************************************************************************************************/
 void nrf_write_rf_setup(uint8_t config);
+/*****************************************************************************************************
+*nrf_read_rf_setup
+*	description:This function returns the value that has been written to the register
+*	parameters:
+		This function has no parameters
+*	returns:
+			This function returns the value that has been written to NORDIC_RF_SETUP
+*****************************************************************************************************/
 uint8_t nrf_read_rf_setup();
+/*****************************************************************************************************
+*nrf_write_rf_Ch
+*	description:This function writes the value of the channel given, this
+	function calls the nrf_write function
+*	parameters:
+		channle
+*	returns:
+			Returns an enum saying the buffer has been initialised, also it
+			sets the size of the circular buffer
+*****************************************************************************************************/
 void nrf_write_rf_ch(uint8_t channel);
+/*****************************************************************************************************
+*nrf_read_rf_ch
+*	description:This function reads the value of channel given by using macro NORDIC_RF_CH
+*	parameters:
+		This function has no parameters.
+*	returns:
+			Returns the value of the channel given in the nrf_write_ch
+*****************************************************************************************************/
 uint8_t nrf_read_rf_ch();
+/*****************************************************************************************************
+*nrf_write_TX_ADDR
+*	description:This function writes 5 bytes, of the TX_ADDR[5]
+*	parameters:
+		uint8_t * tx_addr = This function takes the pointer to the first element in the array
+*	returns:
+			This function does not return anything
+*****************************************************************************************************/
 void nrf_write_TX_ADDR(uint8_t * tx_addr);
+/*****************************************************************************************************
+*nrf_read_TX_ADDR
+*	description:This function reads the 5 bytes data that has been written in the above function
+*	parameters:
+		This function takes the pointer pointing the first element in the array defined in the main function
+*	returns:
+			This function does not return anything
+*****************************************************************************************************/
 void nrf_read_TX_ADDR(uint8_t * tx_addr);
+/*****************************************************************************************************
+*nrf_read_fifo_status
+*	description:This function reads the fifo status, for this the function nrf_read has been called
+				and the register parameter that goes into nrf_read NORDIC_FIFO_STATUS
+*	parameters:
+				This function has no parameters
+*	returns:
+				This function returns the fifo status
+*****************************************************************************************************/
 uint8_t nrf_read_fifo_status();
+/*****************************************************************************************************
+*nrf_flush_rx_fifo
+*	description:This function is used to flush the TX_fifo, the macro used
+				in the function SPI_write_Read_byte
+ 	 	 	 	is FLUSH_TX
+*	parameters:
+				This function has no parameters
+*	returns:
+				This funtion does not return anything
+*****************************************************************************************************/
 void nrf_flush_tx_fifo(void);
+/*****************************************************************************************************
+*nrf_flush_rx_fifo
+*	description:This function is used to flush the RX_fifo, the macro used
+				in the function SPI_write_read_byte
+				is FLUSH_RX
+*	parameters:
+*				This function does not have any parameters
+	returns:
+				This function does not return anything
+*****************************************************************************************************/
 void nrf_flush_rx_fifo(void);
-/*
-uint8_t NORDIC_ReadPayload(void *loc, uint8_t len);
-uint8_t NORDIC_ConfigTX(void);
-void NORDIC_ConfigRX(void);
-void CE_High(void);
-void CE_Low(void);
-void NORDIC_Write_Multiple(uint8_t register1, uint8_t *loc, uint8_t size);
-void NORDIC_Read_Multiple(uint8_t* ptr, uint8_t size);
-uint8_t NORDIC_Get_Status(void);
-uint8_t NORDIC_Set_TX_Address(void);
-uint8_t NORDIC_RF_Setup(void);
-uint8_t nrf_read_rf_ch();
-void nrf_write_rf_ch(uint8_t channel);
-void NORDIC_ResetStatusIRQ(uint8_t flags);
-void delay_100us(volatile unsigned char n);
-void NORDIC_TX_Payload(uint8_t *payload, uint8_t Payload_size);
-void nrf_flush_tx_fifo(void);
-void nrf_flush_rx_fifo(void);
-//void test_function();
-//void test_func_2();
-//void delay(uint8_t delay);
 
-*/
 #endif /* SOURCES_NRF_H_ */

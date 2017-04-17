@@ -1,9 +1,29 @@
-/*
- * uart.h
- *
- *  Created on: Mar 3, 2017
- *      Author: Jeet
- */
+//**************************************************************************************
+*   File: uart.h
+*
+*   Copyrights 2016  Sudeep Kulkarniirlekar and Jeet Baru
+*   All Rights Reserved
+*
+*
+*   The information contained herein is property of the Authors. 
+*   The copying and distribution of the files is prohibited except
+*   by express written agreement with the Authors.
+*
+*
+*   Authors: Sudeep Kulkarniirlekar and Jeet Baru
+*   Date Edited: 12 March 2017
+*
+*   Description: Source file for implementing Circular buffer functions
+*              - CircBuf_size 
+*              - is_buffer_full
+*	       - is_buffer_empty
+*              - initialize_buffer
+*              - destroy_buffer
+*              - add_item
+*              - remove_item
+*	       - cirbuf_peak
+*
+****************************************************************************************/
 
 #ifndef _UART_H_
 #define _UART_H_
@@ -26,11 +46,37 @@
 #define DATA_RECIEVED 0x20
 #define DATA_TRANSMIT_READY 0x80
 #define DATA_TRANSMITTED 0x40
+/*****************************************************************************************************
+*uartinit
+*	description:This function initializes UART registers to required values
 
+*****************************************************************************************************/
 void uartinit();
+/*****************************************************************************************************
+*send byte
+*	description:this function send single byte using polling
+*	parameters:
+		uint8_t data - data to be sent
+*****************************************************************************************************/
 void sendbyte(uint8_t data);
+/*****************************************************************************************************
+*recieve byte
+*	description:this function recieves single byte using polling
+*	returntype:
+		uint8_t data - data to be received
+*****************************************************************************************************/
 uint8_t recievebyte();
+/*****************************************************************************************************
+*send n bytes
+*	description:this function send multiple byte using interrupts
+		data is sent from th transmit buffer
+*****************************************************************************************************/
 void sendnbytes(int8_t * ptr, int32_t l);
+/*****************************************************************************************************
+*recieve n bytes
+*	description:this function recieve multiple byte using interrupts
+		data recieved is stored in circ_pre receiver buffer
+*****************************************************************************************************/
 void recieve_n_bytes();
 
 #endif /* SOURCES_UART_H_ */

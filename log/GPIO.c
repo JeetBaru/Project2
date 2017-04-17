@@ -8,7 +8,7 @@
 
 
 
-
+//function we use in SPI configuration by configuring the GPIO pins
 void Gpio_Init()
 {
 	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK;
@@ -19,6 +19,7 @@ void Gpio_Init()
 	PORTC_PCR3 |= PORT_PCR_MUX(1);			//For CE pin
 
 }
+// The function is used to setting the direction output and make CE pin high
 void setting_high()
 {
 	//enabling port C
@@ -30,7 +31,8 @@ void setting_high()
 		//making the CE pin high (active high)
 		PTC->PSOR = 0x08;
 }
-
+// The function is used to setting the alternat function 1 or GPIO pin for pin3 and
+//setting the CE pin low.
 void setting_low()
 {
 	//enabling port C
