@@ -23,8 +23,22 @@ uint32_t start_time;
 uint32_t stop_time;
 uint32_t diff;
 uint32_t overflow;
-
-void start_timer();
-uint16_t read_count();
+/*****************************************************************************************************
+*start_timer
+*	description:function to configure and implement the timer
+*	parameters:
+		This function has no parameters
+*   return : This function does not return anything
+*****************************************************************************************************/
+	void start_timer();
+/*****************************************************************************************************
+*read_count
+*	description:function to disable the irq and incrementing the overflow flag and then clearning
+				the flag by asserting it
+*	parameters:
+			This function has no parameters
+*   return : This function returns the read count of the current state
+*****************************************************************************************************/
+	uint16_t read_count();
 
 #endif /* SOURCES_PROFILER_H_ */
