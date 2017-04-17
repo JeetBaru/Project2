@@ -125,7 +125,6 @@ void UART0_IRQHandler()
 	{
 		UART0_C2 &= 0xDF;
 		add_item(circ_pre,UART0_D);
-		//sendbyte(*(circ_pre->head-1));// add item to receive buffer
 	}
 }
 
