@@ -1,3 +1,17 @@
+/***************************************************************************
+file name : spi_d.c
+
+Author : Sudeep Kulkarniirlekar
+	Jeet Baru
+
+Description : This file is basically written to enable the serial peripheral
+		interface on beaglebone black
+
+****************************************************************************/
+
+
+
+
 #include <stdint.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -304,37 +318,36 @@ int main(){
 
         uint8_t read_config, read_RF_setup, read_RF_channel;
 
-        SPI_setMaxFrequency(spi_fd,1000000);
-        SPI_setClockMode(spi_fd,0);
-        SPI_enable3Wire(spi_fd);
-        SPI_setBitOrder(spi_fd,0);
-        SPI_setBitsPerWord(spi_fd,8);
-
+        SPI_setMaxFrequency(spi_fd,1000000); 			//setting the frequency to 1MHz
+        SPI_setClockMode(spi_fd,0);				//setting the clock mode to 0
+        SPI_enable3Wire(spi_fd);				//enabling the 3 wire mode
+        SPI_setBitOrder(spi_fd,0);				//setting the bit order
+        SPI_setBitsPerWord(spi_fd,8);				//setting the bits per words
+		
         uint8_t port = 117;
-        uint8_t A[]= {0x01,0x02,0x03,0x4,0x5};
+        //uint8_t A[]= {0x01,0x02,0x03,0x4,0x5};
         nrf_write_config(spi_fd, port);
         read_config = nrf_read_config(spi_fd, port);
-
+	
+	//printing the value written to the config register
         printf("read_config = %x   \n", read_config);
-
+	
         nrf_write_RF_setup(spi_fd, port);
 
         read_RF_setup= nrf_read_RF_setup(spi_fd, port);
 
+	//printing the value written to the RF_setup register
         printf("read_RF_config = %x   \n", read_RF_setup);
 
 
         nrf_write_RF_channel(spi_fd, port);
         read_RF_channel= nrf_read_RF_channel(spi_fd, port);
-
+	
+	//printing the value written to the RF_channel register
         printf("read_RF_channel = %x   \n", read_RF_channel);
 
         nrf_write_TXADDR(spi_fd, port);
         nrf_read_TXADDR(spi_fd, port);
 
-        //for (int i=0;i<5;i++){
- //printf("value= %x \n",read_status[i]);
-
-        //}
 }
 
