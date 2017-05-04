@@ -24,7 +24,7 @@ void rtc_init(void)
 	}
     //RTC_TCR = RTC_TCR_CIR(1) | RTC_TCR_TCR(0xCF);   //Setup compensation parameters
     //RTC_CR |= RTC_CR_OSCE_MASK;                     //Enable 32.768Hz oscillator
-    RTC_TSR = 0x12345678;                           //Reset the seconds register
+    RTC_TSR = TIMES;                           //Reset the seconds register
 
     RTC_IER = 0x00;
     //RTC_IER |=0x10;

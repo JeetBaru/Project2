@@ -70,7 +70,7 @@ void initialize()
 
 int main(void)
 {
-	uint16_t i;
+	uint16_t i,j;
 
 #ifndef VERBOSE
 	rtc_init();												//initialize RTC
@@ -84,12 +84,15 @@ int main(void)
 
 	while(1)
 	{
-		(*cmd_fp[0])(0);									//call get command via function pointer
-		sendnbytes("CommandRecieved",15);
-		i = (*cmd_fp[1])(0);								//call validate command via function pointer
-		if(i==1)
-			(*cmd_fp[2])(0);								//call decode command vis function pointer
-		free(cmd_msg[0].data);
+		j = (*cmd_fp[0])(0);									//call get command via function pointer
+		if(j==1)
+		{
+			sendnbytes("CommandRecieved",15);
+			i = (*cmd_fp[1])(0);								//call validate command via function pointer
+			if(i==1)
+				(*cmd_fp[2])(0);								//call decode command vis function pointer
+			free(cmd_msg[0].data);
+		}
 	}
 
     return 0;
