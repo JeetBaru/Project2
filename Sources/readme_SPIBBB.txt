@@ -28,13 +28,17 @@ All the macros for different registers are included in the library and the funct
 
 *************************command.c********************************
 
+This file cosists of function that deal with receiving command decoding it and validating the cammand. The command is recieved in the order of CommandID
+Data length, data values and 2 digits of checksum. This is done by calling UART receive functions. On receiving the cammand we check for its validity.
+For checking validity we include a checksum in the command. Our checksum checks for the sum of all elements and if checksum matches the sum we say the cammand entered is valid.
+Finally if valid command is received we decode the command, depending on the command ID. This function also calls the respective LED function.  
 
 
-*************************command.h********************************
-Getting the command from the user then decoding and validation is done in the library file of command. The proper include guards and the function definition are included in the library
+************************LED.c*********************************
+This file consists functions that configure LEDs to specific brightness. This is done by writing the brightness value to the max count value of the respective counter.
+Also this file has functions that turn the LEDs on and off by writing 0 and MAX values to the registers. Also we have a function that lights the LEDs to specific
+colors depending on the user input. This is done by selecting combinations of the LEDs.
 
-
-*************************profiler.h********************************
-The start timer stop timer, difference, overflow are defined in the library files and the, This library has the functios which configure and implement the timer. And has function to disable the irq and incrementing the overflow flag and then clearing, with proper include guards
-
-************************profiler.c*********************************
+*********************************PWM.c****************************
+This file consists functions to initialize LEDs to their respective timer channels. A final PWM init function calls init for each LEDs.
+THe brightness of each LED can be changed by writing to its max count value. 
